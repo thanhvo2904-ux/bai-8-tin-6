@@ -1,0 +1,1815 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Trò Chơi Học Tập Tương Tác - Tin Học THCS | Trường TH&THCS Sơn Trung</title>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --secondary: #10b981;
+    --accent: #f59e0b;
+    --danger: #ef4444;
+    --purple: #8b5cf6;
+    --bg: #f0f7ff;
+    --card-bg: #ffffff;
+    --text-main: #0f172a;
+    --text-muted: #475569;
+    --border-color: #cbd5e1;
+    --shadow-sticker: 0 6px 0 #cbd5e1, 0 10px 20px rgba(15, 23, 42, 0.08);
+    --shadow-btn: 0 4px 0 rgba(0,0,0,0.2);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Times New Roman", Times, serif; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(#bfdbfe 1.5px, transparent 1.5px);
+    background-size: 24px 24px;
+    color: var(--text-main);
+    font-size: 20px;
+    line-height: 1.5;
+    min-height: 100vh;
+    padding-bottom: 40px;
+  }
+  .top-header {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+    color: #ffffff;
+    padding: 12px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.25);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .school-badge { display: flex; flex-direction: column; }
+  .school-badge .school-name { font-weight: bold; font-size: 20px; }
+  .school-badge .teacher-name { font-size: 17px; color: #dbeafe; }
+  .header-controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .btn-icon {
+    background: rgba(255,255,255,0.18);
+    border: 2px solid rgba(255,255,255,0.4);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 18px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .container { max-width: 1020px; margin: 24px auto; padding: 0 16px; }
+  .card {
+    background: var(--card-bg);
+    border: 3px solid #93c5fd;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: var(--shadow-sticker);
+    margin-bottom: 24px;
+  }
+  h1 { font-size: 32px; color: #1e3a8a; text-align: center; margin-bottom: 12px; }
+  h2 { font-size: 26px; color: #1d4ed8; margin-bottom: 14px; }
+  h3 { font-size: 22px; color: #0f172a; margin-bottom: 10px; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 22px;
+    border-radius: 14px;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: var(--shadow-btn);
+    text-align: center;
+  }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-success { background: var(--secondary); color: #fff; }
+  .btn-warning { background: var(--accent); color: #fff; }
+  .btn-danger { background: var(--danger); color: #fff; }
+  .btn-purple { background: var(--purple); color: #fff; }
+  .btn-outline { background: #fff; color: var(--primary); border: 2px solid var(--primary); box-shadow: none; }
+  .btn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 20px; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+  .hero-box { text-align: center; padding: 10px 0; }
+  .game-tag {
+    display: inline-block;
+    background: #dbeafe;
+    color: #1e40af;
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 12px;
+    border: 2px solid #93c5fd;
+  }
+  .story-box { background: #f8fafc; border-left: 6px solid var(--primary); padding: 16px; border-radius: 12px; text-align: left; margin: 16px 0; }
+  .form-group { margin-bottom: 18px; }
+  .form-group label { display: block; font-weight: bold; margin-bottom: 6px; color: #1e3a8a; }
+  .form-control { width: 100%; padding: 12px 16px; font-size: 20px; border: 2px solid #94a3b8; border-radius: 12px; background: #fff; }
+  .char-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 12px; margin-top: 10px; }
+  .char-card { border: 3px solid #cbd5e1; border-radius: 16px; padding: 12px; text-align: center; cursor: pointer; background: #f8fafc; }
+  .char-card.selected { border-color: var(--primary); background: #eff6ff; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); }
+  .char-avatar { font-size: 42px; display: block; margin-bottom: 4px; }
+  .char-name { font-weight: bold; font-size: 19px; color: #1e3a8a; }
+  .char-desc { font-size: 16px; color: var(--text-muted); line-height: 1.3; margin-top: 4px; }
+  .hud-bar {
+    background: #ffffff;
+    border: 3px solid #60a5fa;
+    border-radius: 18px;
+    padding: 12px 18px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .hud-profile { display: flex; align-items: center; gap: 12px; }
+  .hud-avatar { font-size: 38px; background: #eff6ff; padding: 6px 10px; border-radius: 14px; border: 2px solid #93c5fd; }
+  .hud-stats { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .stat-pill { background: #f1f5f9; padding: 6px 14px; border-radius: 12px; font-weight: bold; border: 2px solid #cbd5e1; display: flex; align-items: center; gap: 6px; }
+  .xp-bar-wrap { width: 120px; height: 14px; background: #e2e8f0; border-radius: 999px; overflow: hidden; border: 1px solid #94a3b8; }
+  .xp-bar-fill { height: 100%; background: linear-gradient(90deg, #10b981, #3b82f6); width: 0%; transition: width 0.4s; }
+  .stage-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+  .stage-card { border: 3px solid #93c5fd; border-radius: 18px; padding: 18px; background: #fff; display: flex; flex-direction: column; justify-content: space-between; }
+  .stage-card.locked { background: #f1f5f9; border-color: #cbd5e1; opacity: 0.8; }
+  .stage-card.completed { border-color: var(--secondary); background: #f0fdf4; }
+  .stage-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 10px; }
+  .stage-icon { font-size: 38px; }
+  .stage-stars { font-size: 22px; letter-spacing: 2px; }
+  .stage-badge { display: inline-block; padding: 4px 10px; border-radius: 8px; font-size: 16px; font-weight: bold; background: #dbeafe; color: #1e40af; margin-bottom: 8px; }
+  .quiz-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px dashed #cbd5e1; }
+  .progress-track { width: 100%; height: 16px; background: #e2e8f0; border-radius: 999px; overflow: hidden; margin-bottom: 18px; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #2563eb, #10b981); transition: width 0.3s ease; }
+  .question-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .meta-tag { font-size: 16px; padding: 4px 12px; border-radius: 8px; background: #f1f5f9; border: 1px solid #cbd5e1; font-weight: bold; }
+  .question-text { font-size: 22px; font-weight: bold; color: #0f172a; margin-bottom: 18px; background: #f8fafc; padding: 16px; border-radius: 14px; border: 2px solid #e2e8f0; }
+  .options-list { display: flex; flex-direction: column; gap: 12px; }
+  .option-btn { text-align: left; padding: 14px 18px; border: 3px solid #cbd5e1; border-radius: 14px; background: #fff; font-size: 20px; cursor: pointer; display: flex; align-items: center; gap: 12px; }
+  .option-btn.selected { border-color: var(--primary); background: #dbeafe; font-weight: bold; }
+  .option-btn.correct { border-color: var(--secondary); background: #dcfce7; color: #14532d; font-weight: bold; }
+  .option-btn.wrong { border-color: var(--danger); background: #fee2e2; color: #7f1d1d; }
+  .option-btn.eliminated { opacity: 0.35; text-decoration: line-through; pointer-events: none; }
+  .tf-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding: 12px; border: 2px solid #cbd5e1; border-radius: 12px; margin-bottom: 10px; background: #fff; }
+  .tf-choices { display: flex; gap: 8px; }
+  .tf-btn { padding: 6px 16px; border-radius: 10px; border: 2px solid #94a3b8; background: #f8fafc; font-size: 18px; font-weight: bold; cursor: pointer; }
+  .tf-btn.active-true { background: #10b981; color: #fff; border-color: #059669; }
+  .tf-btn.active-false { background: #ef4444; color: #fff; border-color: #dc2626; }
+  .order-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border: 2px solid #93c5fd; border-radius: 12px; background: #eff6ff; margin-bottom: 10px; gap: 10px; }
+  .order-controls { display: flex; gap: 6px; }
+  .order-btn { padding: 6px 12px; border-radius: 8px; border: 2px solid #2563eb; background: #fff; font-weight: bold; cursor: pointer; font-size: 18px; }
+  .match-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: center; padding: 10px; border: 2px solid #cbd5e1; border-radius: 12px; margin-bottom: 10px; background: #f8fafc; }
+  @media (max-width: 640px) { .match-row { grid-template-columns: 1fr; } }
+  .fill-box { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+  .fill-input { width: 100%; max-width: 460px; padding: 14px; font-size: 22px; text-align: center; border: 3px solid var(--primary); border-radius: 14px; font-weight: bold; }
+  .keypad { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; max-width: 460px; width: 100%; }
+  .key-btn { padding: 12px; font-size: 20px; font-weight: bold; border-radius: 10px; border: 2px solid #94a3b8; background: #f1f5f9; cursor: pointer; }
+  .powerup-bar { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; padding: 12px; background: #fffbeb; border: 2px dashed #f59e0b; border-radius: 14px; align-items: center; }
+  .powerup-btn { padding: 8px 14px; border-radius: 10px; border: 2px solid #f59e0b; background: #fff; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+  .powerup-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .feedback-box { margin-top: 20px; padding: 18px; border-radius: 16px; border: 3px solid; display: none; }
+  .feedback-box.correct { background: #f0fdf4; border-color: #10b981; }
+  .feedback-box.wrong { background: #fef2f2; border-color: #ef4444; }
+  .feedback-title { font-size: 22px; font-weight: bold; margin-bottom: 8px; }
+  .feedback-detail p { margin-bottom: 8px; }
+  .tabs-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; border-bottom: 3px solid #cbd5e1; padding-bottom: 10px; }
+  .tab-btn { padding: 10px 16px; border-radius: 12px; border: 2px solid #cbd5e1; background: #f8fafc; font-size: 18px; font-weight: bold; cursor: pointer; }
+  .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 20px; }
+  .kpi-card { background: #f8fafc; border: 2px solid #93c5fd; border-radius: 16px; padding: 16px; text-align: center; }
+  .kpi-value { font-size: 30px; font-weight: bold; color: var(--primary); }
+  .kpi-label { font-size: 17px; color: var(--text-muted); font-weight: bold; }
+  .table-responsive { width: 100%; overflow-x: auto; margin-top: 12px; }
+  table { width: 100%; border-collapse: collapse; font-size: 18px; }
+  th, td { border: 1px solid #cbd5e1; padding: 10px 12px; text-align: left; }
+  th { background: #1e3a8a; color: #fff; }
+  tr:nth-child(even) { background: #f8fafc; }
+  .bar-chart-row { margin-bottom: 14px; }
+  .bar-chart-label { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 4px; }
+  .bar-chart-track { width: 100%; height: 24px; background: #e2e8f0; border-radius: 8px; overflow: hidden; display: flex; }
+  .bar-wrong { background: #ef4444; height: 100%; transition: width 0.4s; }
+  .bar-right { background: #10b981; height: 100%; transition: width 0.4s; }
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); display: none; justify-content: center; align-items: center; z-index: 200; padding: 16px; }
+  .modal-backdrop.active { display: flex; }
+  .modal-box { background: #fff; border-radius: 20px; max-width: 720px; width: 100%; max-height: 88vh; overflow-y: auto; padding: 24px; border: 3px solid var(--primary); }
+  .sync-badge { font-size: 16px; padding: 4px 10px; border-radius: 8px; background: #e0f2fe; color: #0369a1; font-weight: bold; }
+  @media print {
+    .top-header, .btn, .tabs-nav, .no-print { display: none !important; }
+    body { background: #fff; font-size: 16px; }
+    .card { box-shadow: none; border: 1px solid #000; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top-header">
+  <div class="school-badge">
+    <span class="school-name">TRƯỜNG TH&THCS SƠN TRUNG</span>
+    <span class="teacher-name">Giáo viên phụ trách: Võ Thị Thanh • Hệ thống Trò chơi học tập tương tác</span>
+  </div>
+  <div class="header-controls">
+    <span id="syncStatusBadge" class="sync-badge">💾 Lưu cục bộ</span>
+    <button class="btn-icon" onclick="toggleSound()" id="btnSound">🔊 Âm thanh: Bật</button>
+    <button class="btn-icon" onclick="goHome()">🏠 Trang chủ</button>
+  </div>
+</header>
+
+<div class="container">
+  <section id="screen-home" class="screen active">
+    <div class="card hero-box">
+      <div class="game-tag" id="ui-subject-tag"></div>
+      <h1 id="ui-game-title"></h1>
+      <p id="ui-lesson-subtitle" style="font-weight: bold; color: #334155; margin-bottom: 12px;"></p>
+      <div class="story-box">
+        <p><strong>📜 Cốt truyện nhiệm vụ:</strong> <span id="ui-story-text"></span></p>
+        <p style="margin-top: 8px;"><strong>🎯 Mục tiêu hành trình:</strong> <span id="ui-goal-text"></span></p>
+      </div>
+      <div id="resume-banner" style="display:none; background:#ecfdf5; border:2px solid #10b981; border-radius:14px; padding:14px; margin-bottom:16px;">
+        <p style="font-weight:bold; color:#065f46;">👋 Chào mừng <span id="resume-name"></span> (<span id="resume-class"></span>) quay trở lại!</p>
+        <p style="font-size:18px; color:#047857;">Tiến độ hiện tại: <span id="resume-progress"></span></p>
+      </div>
+      <div class="btn-grid">
+        <button class="btn btn-success" id="btn-continue" style="display:none;" onclick="resumeGame()">▶️ CHƠI TIẾP</button>
+        <button class="btn btn-primary" onclick="openProfileSetup()">🚀 BẮT ĐẦU HÀNH TRÌNH MỚI</button>
+        <button class="btn btn-warning" onclick="openReviewVault()">📚 KHO ÔN TẬP (<span id="vault-count-home">0</span>)</button>
+        <button class="btn btn-outline" onclick="openModal('modal-guide')">📖 HƯỚNG DẪN CÁCH CHƠI</button>
+        <button class="btn btn-purple" onclick="openTeacherAuth()">📊 THỐNG KÊ GIÁO VIÊN</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="screen-profile" class="screen">
+    <div class="card">
+      <h2>🧑‍🚀 THIẾT LẬP HỒ SƠ NHÂN VẬT</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;">
+        <div class="form-group">
+          <label for="inp-name">Họ và tên học sinh (*)</label>
+          <input type="text" id="inp-name" class="form-control" placeholder="Ví dụ: Đinh Văn An">
+        </div>
+        <div class="form-group">
+          <label for="inp-class">Lớp (*)</label>
+          <select id="inp-class" class="form-control"></select>
+        </div>
+        <div class="form-group">
+          <label for="inp-code">Mã học sinh (nếu có)</label>
+          <input type="text" id="inp-code" class="form-control" placeholder="Ví dụ: HS01">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Chọn nhân vật đồng hành (10 nhân vật) (*)</label>
+        <div class="char-grid" id="char-grid"></div>
+      </div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:20px;">
+        <button class="btn btn-success" onclick="confirmProfile()">✅ XÁC NHẬN & VÀO BẢN ĐỒ</button>
+        <button class="btn btn-outline" onclick="goHome()">⬅️ Quay lại</button>
+      </div>
+    </div>
+  </section>
+
+  <div id="player-hud" class="hud-bar" style="display:none;">
+    <div class="hud-profile">
+      <div class="hud-avatar" id="hud-avatar">🕵️</div>
+      <div>
+        <div style="font-weight:bold; color:#1e3a8a;" id="hud-name"></div>
+        <div style="font-size:16px; color:#475569;" id="hud-title"></div>
+      </div>
+    </div>
+    <div class="hud-stats">
+      <div class="stat-pill">❤️ <span id="hud-hearts">5</span>/5</div>
+      <div class="stat-pill">🪙 <span id="hud-gold">0</span></div>
+      <div class="stat-pill">⭐ <span id="hud-stars">0</span></div>
+      <div class="stat-pill">
+        <span>⚡ Lv.<span id="hud-level">1</span></span>
+        <div class="xp-bar-wrap"><div class="xp-bar-fill" id="hud-xp-bar"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <section id="screen-map" class="screen">
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
+        <h2>🗺️ BẢN ĐỒ HÀNH TRÌNH CÁC TRẠM THỬ THÁCH</h2>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn btn-warning" onclick="openReviewVault()">📚 Kho ôn tập (<span id="vault-count-map">0</span>)</button>
+          <button class="btn btn-outline" onclick="openModal('modal-badges')">🏅 Huy hiệu</button>
+          <button class="btn btn-success" id="btn-finish-journey" style="display:none;" onclick="showFinalSummary()">🏆 Xem tổng kết</button>
+        </div>
+      </div>
+      <div class="stage-grid" id="stage-grid"></div>
+    </div>
+  </section>
+
+  <section id="screen-quiz" class="screen">
+    <div class="card">
+      <div class="quiz-top">
+        <div>
+          <strong id="quiz-stage-title" style="color:#1e3a8a; font-size:22px;"></strong>
+          <span id="quiz-counter" style="margin-left:10px; font-weight:bold; color:#2563eb;"></span>
+        </div>
+        <button class="btn btn-outline" style="padding:6px 14px; font-size:18px;" onclick="exitStageToMap()">🗺️ Về bản đồ</button>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="quiz-progress-bar"></div></div>
+      <div class="powerup-bar">
+        <strong style="color:#b45309;">🎒 Cửa hàng trợ giúp:</strong>
+        <button class="powerup-btn" id="pu-hint" onclick="usePowerup('hint')">📜 Cuộn gợi ý (15🪙)</button>
+        <button class="powerup-btn" id="pu-5050" onclick="usePowerup('5050')">✂️ Kéo 50:50 (25🪙)</button>
+        <button class="powerup-btn" id="pu-skip" onclick="usePowerup('skip')">👟 Giày bỏ qua (30🪙)</button>
+        <button class="powerup-btn" id="pu-heal" onclick="usePowerup('heal')">🧪 Bình hồi tim (35🪙)</button>
+      </div>
+      <div id="hint-display" style="display:none; background:#fef3c7; border:2px solid #f59e0b; padding:12px; border-radius:12px; margin-bottom:14px;">
+        <strong>💡 Gợi ý:</strong> <span id="hint-text"></span>
+      </div>
+      <div class="question-meta">
+        <span class="meta-tag" id="q-code"></span>
+        <span class="meta-tag" id="q-topic"></span>
+        <span class="meta-tag" id="q-level"></span>
+        <span class="meta-tag" id="q-type-label"></span>
+      </div>
+      <div class="question-text" id="question-text"></div>
+      <div id="answer-area"></div>
+      <div style="margin-top: 20px; display:flex; gap:12px; flex-wrap:wrap;">
+        <button class="btn btn-primary" id="btn-submit-answer" onclick="submitAnswer()">✔️ XÁC NHẬN ĐÁP ÁN</button>
+        <button class="btn btn-success" id="btn-next-question" style="display:none;" onclick="nextQuestion()">➡️ CÂU TIẾP THEO</button>
+      </div>
+      <div class="feedback-box" id="feedback-box">
+        <div class="feedback-title" id="fb-title"></div>
+        <div class="feedback-detail" id="fb-content"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="screen-vault" class="screen">
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
+        <h2>📚 KHO ÔN TẬP CÁ NHÂN & HỒI TIM</h2>
+        <button class="btn btn-outline" onclick="goMap()">⬅️ Quay lại</button>
+      </div>
+      <p style="margin-bottom:14px; color:#334155;">Giải đúng mỗi câu sai trong Kho ôn tập sẽ hồi lại <strong>+1 ❤️ Tim</strong>.</p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;">
+        <select id="vault-filter-topic" class="form-control" style="max-width:300px;" onchange="renderVaultList()">
+          <option value="ALL">Tất cả chủ đề kiến thức</option>
+        </select>
+      </div>
+      <div id="vault-list"></div>
+    </div>
+  </section>
+
+  <section id="screen-summary" class="screen">
+    <div class="card">
+      <h1>🏆 TỔNG KẾT HÀNH TRÌNH CHINH PHỤC</h1>
+      <div id="summary-header-info" style="background:#eff6ff; border:2px solid #93c5fd; border-radius:16px; padding:16px; margin-bottom:18px;"></div>
+      <div class="kpi-grid" id="summary-kpis"></div>
+      <h3>📊 Kết quả từng trạm thử thách</h3>
+      <div id="summary-stages" style="margin: 14px 0 20px 0;"></div>
+      <div style="background:#f0fdf4; border:2px solid #10b981; border-radius:16px; padding:16px; margin-bottom:18px;">
+        <h3>💬 Nhận xét sư phạm dành riêng cho em</h3>
+        <div id="summary-pedagogy"></div>
+      </div>
+      <div class="btn-grid">
+        <button class="btn btn-warning" onclick="openReviewVault()">📚 VÀO KHO ÔN TẬP</button>
+        <button class="btn btn-primary" onclick="goMap()">🗺️ XEM LẠI BẢN ĐỒ</button>
+        <button class="btn btn-danger" onclick="confirmResetGame()">🔄 CHƠI LẠI TỪ ĐẦU</button>
+        <button class="btn btn-outline" onclick="goHome()">🏠 QUAY VỀ TRANG CHỦ</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="screen-teacher" class="screen">
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
+        <div>
+          <h2>📊 TRANG QUẢN LÝ VÀ THỐNG KÊ GIÁO VIÊN</h2>
+          <p style="font-size:17px; color:#475569;">Giáo viên: <strong>Võ Thị Thanh</strong> • Đơn vị: <strong>Trường TH&THCS Sơn Trung</strong></p>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;" class="no-print">
+          <button class="btn btn-primary" style="padding:8px 14px; font-size:17px;" onclick="fetchTeacherDataFromCloud()">☁️ Đồng bộ Google Sheets</button>
+          <button class="btn btn-outline" style="padding:8px 14px; font-size:17px;" onclick="openModal('modal-config')">⚙️ Cấu hình Web App</button>
+          <button class="btn btn-danger" style="padding:8px 14px; font-size:17px;" onclick="goHome()">🚪 Thoát</button>
+        </div>
+      </div>
+      <div style="display:flex; flex-wrap:wrap; gap:10px; background:#f8fafc; padding:12px; border-radius:12px; border:1px solid #cbd5e1; margin-bottom:16px;" class="no-print">
+        <select id="t-filter-class" class="form-control" style="max-width:200px;" onchange="renderTeacherDashboard()"><option value="ALL">Tất cả các lớp</option></select>
+        <select id="t-filter-status" class="form-control" style="max-width:220px;" onchange="renderTeacherDashboard()">
+          <option value="ALL">Tất cả trạng thái</option>
+          <option value="COMPLETED">Đã hoàn thành</option>
+          <option value="IN_PROGRESS">Đang thực hiện</option>
+        </select>
+        <input type="text" id="t-search-student" class="form-control" style="max-width:260px;" placeholder="🔍 Tìm tên học sinh..." oninput="renderTeacherDashboard()">
+      </div>
+      <div class="kpi-grid" id="t-kpi-grid"></div>
+      <h3>🏫 Thống kê tình hình tham gia theo lớp</h3>
+      <div id="t-class-cards" class="stage-grid" style="margin: 12px 0 22px 0;"></div>
+      <div class="tabs-nav no-print">
+        <button class="tab-btn active" onclick="switchTeacherTab(0, this)">1. Dạng sai nhiều & Hỗ trợ</button>
+        <button class="tab-btn" onclick="switchTeacherTab(1, this)">2. Bảng xếp hạng</button>
+        <button class="tab-btn" onclick="switchTeacherTab(2, this)">3. Kiến thức yếu từng em</button>
+        <button class="tab-btn" onclick="switchTeacherTab(3, this)">4. Biểu đồ tỷ lệ sai</button>
+        <button class="tab-btn" onclick="switchTeacherTab(4, this)">5. Thống kê câu hỏi</button>
+        <button class="tab-btn" onclick="switchTeacherTab(5, this)">6. Xuất báo cáo</button>
+      </div>
+      <div class="tab-pane active" id="t-tab-0"><div class="table-responsive" id="t-tab0-content"></div></div>
+      <div class="tab-pane" id="t-tab-1"><div class="table-responsive" id="t-tab1-content"></div></div>
+      <div class="tab-pane" id="t-tab-2"><div class="table-responsive" id="t-tab2-content"></div><div id="t-student-detail-box" style="margin-top:16px;"></div></div>
+      <div class="tab-pane" id="t-tab-3"><div id="t-tab3-content" style="margin-top:12px;"></div></div>
+      <div class="tab-pane" id="t-tab-4"><div class="table-responsive" id="t-tab4-content"></div></div>
+      <div class="tab-pane" id="t-tab-5">
+        <div class="btn-grid">
+          <button class="btn btn-success" onclick="exportCSV('students')">📄 Xuất danh sách kết quả (CSV)</button>
+          <button class="btn btn-primary" onclick="exportCSV('leaderboard')">🏅 Xuất bảng xếp hạng (CSV)</button>
+          <button class="btn btn-warning" onclick="exportCSV('questions')">❓ Xuất thống kê câu hỏi (CSV)</button>
+          <button class="btn btn-purple" onclick="exportCSV('weakness')">⚠️ Xuất thống kê lỗi sai (CSV)</button>
+          <button class="btn btn-outline" onclick="window.print()">🖨️ In báo cáo tổng hợp / Lưu PDF</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="modal-backdrop" id="modal-guide">
+  <div class="modal-box">
+    <h2>📖 HƯỚNG DẪN THAM GIA HÀNH TRÌNH</h2>
+    <ul style="padding-left: 24px; margin: 14px 0;">
+      <li><strong>Bước 1:</strong> Nhập họ tên, chọn lớp và chọn nhân vật đồng hành.</li>
+      <li><strong>Bước 2:</strong> Vượt qua các trạm trên bản đồ (đạt tối thiểu 60% số câu đúng để mở trạm tiếp theo).</li>
+      <li><strong>Bước 3:</strong> Trả lời sai mất 1 Tim và câu hỏi lưu vào Kho ôn tập để luyện lại hồi tim.</li>
+    </ul>
+    <button class="btn btn-primary" onclick="closeModal('modal-guide')">Đã hiểu</button>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modal-badges">
+  <div class="modal-box">
+    <h2>🏅 BỘ SƯU TẬP DANH HIỆU & HUY HIỆU</h2>
+    <div id="badges-list" style="margin: 14px 0;"></div>
+    <button class="btn btn-primary" onclick="closeModal('modal-badges')">Đóng</button>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modal-config">
+  <div class="modal-box">
+    <h2>⚙️ CẤU HÌNH ĐỒNG BỘ GOOGLE APPS SCRIPT</h2>
+    <div class="form-group">
+      <label>Đường dẫn Web App URL (/exec):</label>
+      <input type="text" id="inp-webapp-url" class="form-control" placeholder="https://script.google.com/macros/s/.../exec">
+    </div>
+    <div style="display:flex; gap:10px;">
+      <button class="btn btn-success" onclick="saveWebAppConfig()">💾 Lưu cấu hình</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-config')">Đóng</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// === PLACEHOLDER_GAME_CONFIG ===
+const GAME_CONFIG = {
+  "teacherName": "Võ Thị Thanh",
+  "schoolName": "Trường TH&THCS Sơn Trung",
+  "subject": "Tin học",
+  "grade": "Lớp 6",
+  "bookSeries": "Kết nối tri thức với cuộc sống",
+  "gameTitle": "SỨ GIẢ BƯU CHÍNH SỐ — CHINH PHỤC THƯ ĐIỆN TỬ",
+  "lessonTitle": "Bài 8. Thư điện tử (40 câu trắc nghiệm củng cố)",
+  "story": "Trung tâm Bưu chính Số của Trường TH&THCS Sơn Trung đang cần tuyển những 'Sứ giả Bưu chính Số' tài năng! Em hãy đồng hành cùng nhân vật công nghệ vượt qua 4 trạm thử thách từ cơ bản đến vận dụng thực tế để làm chủ dịch vụ thư điện tử an toàn, văn minh và hiệu quả.",
+  "goal": "Chinh phục trọn vẹn 40 câu hỏi qua 4 trạm thử thách (đạt tối thiểu 60% mỗi trạm) để nhận danh hiệu Nhà vô địch Sơn Trung.",
+  "classes": [
+    "6A",
+    "6B",
+    "7A",
+    "7B",
+    "8A",
+    "8B",
+    "9A",
+    "9B"
+  ],
+  "passRatio": 0.6,
+  "maxHearts": 5,
+  "defaultWebAppUrl": "https://script.google.com/macros/s/AKfycbyK-iK8fiEapaxc9f5vXPWCvVL85YOILsl2pr34jIvEzMxmLRMJxe_KOwySnfy0qw/exec",
+  "teacherPasscode": "SONTRUNG2026",
+  "stages": [
+    {
+      "id": 1,
+      "name": "Trạm 1: Trạm Khởi Hành Bưu Chính Số",
+      "topic": "Khái niệm, chức năng & cấu trúc địa chỉ email",
+      "icon": "📮",
+      "desc": "Nhận biết khái niệm thư điện tử, các nhà cung cấp dịch vụ, cấu trúc địa chỉ email và tính duy nhất."
+    },
+    {
+      "id": 2,
+      "name": "Trạm 2: Cổng Đăng Ký & Giao Diện Gmail",
+      "topic": "Tạo tài khoản, đăng nhập, soạn gửi & bảo mật",
+      "icon": "🔐",
+      "desc": "Nắm vững thao tác tạo tài khoản, quy định độ tuổi, các nút lệnh Gmail và đăng xuất an toàn."
+    },
+    {
+      "id": 3,
+      "name": "Trạm 3: Phòng Phân Tích Ưu Nhược & AI",
+      "topic": "Ưu nhược điểm, quy tắc đặt tên, mật khẩu & tính năng AI",
+      "icon": "🧠",
+      "desc": "Phân tích ưu điểm vượt trội, nguy cơ thư rác, quy tắc mật khẩu mạnh và vai trò của AI trong email."
+    },
+    {
+      "id": 4,
+      "name": "Trạm 4: Đấu Trường Xử Lý Tình Huống Thực Tế",
+      "topic": "Vận dụng gửi thư, phòng tránh lừa đảo & tìm kiếm",
+      "icon": "🚀",
+      "desc": "Giải quyết các tình huống học tập thực tế: nộp bài cho thầy cô, gửi tệp, tránh thư lừa đảo."
+    }
+  ]
+};
+
+// === PLACEHOLDER_QUESTION_BANK ===
+const QUESTION_BANK = [
+  {
+    "id": "C01",
+    "stage": 1,
+    "topic": "Khái niệm & cấu trúc email",
+    "level": "Biết",
+    "type": "mcq",
+    "question": "Thư điện tử (email hay e-mail) là gì?",
+    "options": [
+      "Thư được viết trên giấy và chuyển qua đường bưu điện.",
+      "Thư được gửi và nhận bằng phương tiện điện tử trên mạng máy tính.",
+      "Tin nhắn văn bản chỉ gửi được qua sóng điện thoại di động.",
+      "Bản tin thông báo được đăng công khai trên các trang mạng xã hội."
+    ],
+    "answer": 1,
+    "hint": "Thư điện tử hoạt động thông qua mạng máy tính và các thiết bị điện tử.",
+    "explanation": "Thư điện tử (email hay e-mail) là thư được gửi và nhận bằng phương tiện điện tử trên mạng máy tính.",
+    "commonMistake": "Nhầm lẫn thư điện tử với tin nhắn SMS qua sóng di động hoặc bài đăng công khai trên mạng xã hội.",
+    "remedy": "Ghi nhớ từ khóa cốt lõi: 'phương tiện điện tử' và 'trên mạng máy tính'."
+  },
+  {
+    "id": "C02",
+    "stage": 1,
+    "topic": "Khái niệm & cấu trúc email",
+    "level": "Biết",
+    "type": "mcq",
+    "question": "Dịch vụ thư điện tử cung cấp cho người sử dụng những chức năng cơ bản nào?",
+    "options": [
+      "Soạn thảo, gửi, nhận, chuyển tiếp, lưu trữ và quản lí thư điện tử.",
+      "Thiết kế đồ họa, chỉnh sửa video, lập trình và lưu trữ dữ liệu.",
+      "Tìm kiếm thông tin, xem truyền hình trực tuyến và mua sắm trực tuyến.",
+      "Gọi điện thoại hình ảnh, phát thanh và trò chuyện nhóm trực tiếp."
+    ],
+    "answer": 0,
+    "hint": "Hãy nghĩ tới các thao tác trực tiếp với một bức thư (viết, gửi, nhận, cất giữ...).",
+    "explanation": "Dịch vụ thư điện tử cung cấp các chức năng cơ bản: soạn thảo, gửi, nhận, chuyển tiếp, lưu trữ và quản lí thư điện tử.",
+    "commonMistake": "Nhầm chức năng của dịch vụ email với các dịch vụ Internet khác như mạng xã hội, truyền hình trực tuyến hay phần mềm đồ họa.",
+    "remedy": "Liên hệ thực tế hộp thư Gmail: có nút Soạn thư, Gửi, Hộp thư đến, Chuyển tiếp và các thư mục lưu trữ."
+  },
+  {
+    "id": "C03",
+    "stage": 1,
+    "topic": "Khái niệm & cấu trúc email",
+    "level": "Biết",
+    "type": "mcq",
+    "question": "Nhà cung cấp dịch vụ thư điện tử miễn phí nào sau đây được nêu trong bài học?",
+    "options": [
+      "Viettel, Vinaphone, Mobifone.",
+      "Google, Yahoo, Microsoft.",
+      "FPT, VNPT, CMC Telecom.",
+      "Zalo, Facebook, TikTok."
+    ],
+    "answer": 1,
+    "hint": "Các đuôi địa chỉ quen thuộc như @gmail.com, @yahoo.com, @outlook.com thuộc về các hãng này.",
+    "explanation": "Google, Yahoo, Microsoft là các nhà cung cấp dịch vụ thư điện tử miễn phí phổ biến được giới thiệu trong bài học.",
+    "commonMistake": "Nhầm lẫn nhà cung cấp dịch vụ email với nhà mạng viễn thông (Viettel, VNPT) hoặc mạng xã hội (Zalo, Facebook).",
+    "remedy": "Nhớ 3 tên lớn gắn với dịch vụ email miễn phí: Google (Gmail), Yahoo (Yahoo Mail), Microsoft (Outlook/Hotmail)."
+  },
+  {
+    "id": "C04",
+    "stage": 1,
+    "topic": "Khái niệm & cấu trúc email",
+    "level": "Biết",
+    "type": "mcq",
+    "question": "Khi đăng kí thành công tài khoản thư điện tử, người sử dụng sẽ được cấp những gì?",
+    "options": [
+      "Một hộp thư điện tử trên máy chủ cùng tên đăng nhập và mật khẩu.",
+      "Một đường truyền Internet tốc độ cao cùng thiết bị định tuyến không dây.",
+      "Một địa chỉ trang web cá nhân cùng phần mềm chống virus miễn phí.",
+      "Một thẻ nhớ lưu trữ dữ liệu cùng phần mềm soạn thảo văn bản."
+    ],
+    "answer": 0,
+    "hint": "Tài khoản trực tuyến luôn gắn với không gian lưu trữ trên máy chủ và thông tin đăng nhập.",
+    "explanation": "Khi đăng kí thành công tài khoản thư điện tử, người sử dụng được cấp một hộp thư điện tử trên máy chủ cùng tên đăng nhập và mật khẩu.",
+    "commonMistake": "Tưởng rằng đăng kí email sẽ được tặng thiết bị phần cứng (thẻ nhớ, bộ phát Wi-Fi) hoặc đường truyền Internet.",
+    "remedy": "Phân biệt rõ tài khoản dịch vụ phần mềm trên máy chủ (hộp thư, tên đăng nhập, mật khẩu) với thiết bị vật lí."
+  },
+  {
+    "id": "C05",
+    "stage": 1,
+    "topic": "Khái niệm & cấu trúc email",
+    "level": "Biết",
+    "type": "mcq",
+    "question": "Địa chỉ thư điện tử có cấu trúc chung như thế nào?",
+    "options": [
+      "<địa chỉ máy chủ thư điện tử>@<tên đăng nhập>",
+      "<tên đăng nhập>#<địa chỉ máy chủ thư điện tử>",
+      "<tên đăng nhập>@<địa chỉ máy chủ thư điện tử>",
+      "<mật khẩu>@<địa chỉ máy chủ thư điện tử>"
+    ],
+    "answer": 2,
+    "hint": "Tên người dùng đứng trước dấu @, còn tên miền dịch vụ (như gmail.com) đứng sau dấu @.",
+    "explanation": "Địa chỉ thư điện tử có dạng chuẩn là <tên đăng nhập>@<địa chỉ máy chủ thư điện tử>.",
+    "commonMistake": "Đảo ngược thứ tự hai thành phần hoặc đặt mật khẩu vào trong địa chỉ email.",
+    "remedy": "Lấy ví dụ mẫu: an_lop6a@gmail.com → phần trước @ là tên đăng nhập, phần sau @ là địa chỉ máy chủ."
+  },
+  {
+    "id": "C06",
+    "stage": 1,
+    "topic": "Khái niệm & cấu trúc email",
+    "level": "Biết",
+    "type": "mcq",
+    "question": "Trong địa chỉ thư điện tử, kí tự nào là kí tự bắt buộc phải có?",
+    "options": [
+      "Kí tự &.",
+      "Kí tự #.",
+      "Kí tự @.",
+      "Kí tự $."
+    ],
+    "answer": 2,
+    "hint": "Kí tự này đọc là 'a còng' (at sign).",
+    "explanation": "Kí tự @ là kí tự bắt buộc dùng để ngăn cách giữa tên đăng nhập và địa chỉ máy chủ thư điện tử.",
+    "commonMistake": "Nhầm kí tự @ với kí tự & hoặc # trên bàn phím.",
+    "remedy": "Nhớ kí tự @ (tổ hợp phím Shift + 2) là dấu hiệu nhận biết đặc trưng của mọi địa chỉ email."
+  },
+  {
+    "id": "C07",
+    "stage": 1,
+    "topic": "Khái niệm & cấu trúc email",
+    "level": "Biết",
+    "type": "mcq",
+    "question": "Thành phần nào trong địa chỉ thư điện tử do người sử dụng tự chọn khi đăng kí tài khoản?",
+    "options": [
+      "Tên đăng nhập.",
+      "Địa chỉ máy chủ thư điện tử.",
+      "Kí tự phân cách @.",
+      "Tên miền của nhà cung cấp dịch vụ."
+    ],
+    "answer": 0,
+    "hint": "Phần đứng trước dấu @ thể hiện tên riêng của mỗi người dùng.",
+    "explanation": "Tên đăng nhập (và mật khẩu) do người sử dụng tự chọn khi đăng kí tài khoản, miễn không trùng với người đã đăng kí trước.",
+    "commonMistake": "Cho rằng người dùng có thể tự đặt lại địa chỉ máy chủ của nhà cung cấp.",
+    "remedy": "Phần trước @ do mình tự đặt (tên đăng nhập); phần sau @ do nhà cung cấp quy định sẵn (như gmail.com)."
+  },
+  {
+    "id": "C08",
+    "stage": 1,
+    "topic": "Khái niệm & cấu trúc email",
+    "level": "Biết",
+    "type": "mcq",
+    "question": "Trong địa chỉ thư điện tử haiha1704200@gmail.com, phần gmail.com được gọi là gì?",
+    "options": [
+      "Tên đăng nhập của người dùng.",
+      "Mật khẩu truy cập hộp thư.",
+      "Địa chỉ máy chủ thư điện tử.",
+      "Tiêu đề của bức thư điện tử."
+    ],
+    "answer": 2,
+    "hint": "Thành phần này nằm ngay phía sau kí tự @.",
+    "explanation": "Phần đứng sau dấu @ (gmail.com) là địa chỉ máy chủ thư điện tử do nhà cung cấp dịch vụ quy định.",
+    "commonMistake": "Nhầm phần đứng sau dấu @ là tên đăng nhập hoặc mật khẩu.",
+    "remedy": "Áp dụng công thức <tên đăng nhập>@<địa chỉ máy chủ>: haiha1704200 là tên đăng nhập, gmail.com là địa chỉ máy chủ."
+  },
+  {
+    "id": "C09",
+    "stage": 1,
+    "topic": "Khái niệm & cấu trúc email",
+    "level": "Biết",
+    "type": "mcq",
+    "question": "Phát biểu nào sau đây đúng về tính duy nhất của địa chỉ thư điện tử?",
+    "options": [
+      "Mỗi địa chỉ thư điện tử là duy nhất trên toàn cầu.",
+      "Hai người khác nhau có thể dùng chung một địa chỉ thư điện tử.",
+      "Trong một quốc gia chỉ có duy nhất một địa chỉ thư điện tử.",
+      "Mỗi người chỉ được phép đăng kí một địa chỉ thư điện tử duy nhất."
+    ],
+    "answer": 0,
+    "hint": "Giống như số nhà hoặc số điện thoại, địa chỉ email giúp thư gửi đến đúng một hộp thư xác định.",
+    "explanation": "Mỗi địa chỉ thư điện tử là duy nhất trên toàn cầu, không bao giờ có hai hộp thư trùng hệt địa chỉ nhau.",
+    "commonMistake": "Nhầm giữa 'mỗi địa chỉ email là duy nhất' với 'mỗi người chỉ được tạo một email'.",
+    "remedy": "Một người có thể tạo nhiều email khác nhau, nhưng mỗi địa chỉ email thì chỉ tồn tại duy nhất một trên thế giới."
+  },
+  {
+    "id": "C10",
+    "stage": 1,
+    "topic": "Khái niệm & cấu trúc email",
+    "level": "Biết",
+    "type": "mcq",
+    "question": "Trang web nào sau đây được dùng để truy cập dịch vụ thư điện tử của Google?",
+    "options": [
+      "mail.google.com",
+      "khituongvietnam.gov.vn",
+      "vi.wikipedia.org",
+      "vtvgo.vn"
+    ],
+    "answer": 0,
+    "hint": "Tên miền của trang web có chứa từ 'mail' và 'google'.",
+    "explanation": "mail.google.com (hoặc gmail.com) là địa chỉ trang web truy cập dịch vụ thư điện tử của Google.",
+    "commonMistake": "Chọn nhầm các trang tra cứu bách khoa (wikipedia), dự báo thời tiết hoặc truyền hình.",
+    "remedy": "Ghi nhớ địa chỉ truy cập Gmail là mail.google.com."
+  },
+  {
+    "id": "C11",
+    "stage": 2,
+    "topic": "Tạo tài khoản & sử dụng Gmail",
+    "level": "Biết",
+    "type": "mcq",
+    "question": "Để bắt đầu tạo một tài khoản thư điện tử mới trên trang mail.google.com, em nháy chuột vào nút lệnh nào?",
+    "options": [
+      "Đăng nhập.",
+      "Tạo tài khoản.",
+      "Soạn thư.",
+      "Đăng xuất."
+    ],
+    "answer": 1,
+    "hint": "Khi chưa có tài khoản thì không thể đăng nhập ngay mà phải tạo mới.",
+    "explanation": "Sau khi truy cập mail.google.com, người dùng nháy vào nút 'Tạo tài khoản' để tiến hành đăng kí hộp thư mới.",
+    "commonMistake": "Nhầm lẫn giữa nút 'Đăng nhập' (khi đã có tài khoản) và 'Tạo tài khoản' (khi đăng kí mới).",
+    "remedy": "Phân biệt rõ: Chưa có → Tạo tài khoản; Đã có → Đăng nhập."
+  },
+  {
+    "id": "C12",
+    "stage": 2,
+    "topic": "Tạo tài khoản & sử dụng Gmail",
+    "level": "Biết",
+    "type": "mcq",
+    "question": "Theo quy định của Google, trẻ vị thành niên muốn đăng kí tài khoản thư điện tử cần có điều kiện gì?",
+    "options": [
+      "Phải đóng một khoản phí dịch vụ hằng tháng cho nhà cung cấp.",
+      "Cần có sự đồng ý, trợ giúp và quản lí của phụ huynh.",
+      "Phải có thẻ căn cước công dân và tài khoản ngân hàng riêng.",
+      "Phải được nhà trường cấp giấy chứng nhận học sinh giỏi."
+    ],
+    "answer": 1,
+    "hint": "Học sinh lớp 6 đang ở độ tuổi vị thành niên nên cần người lớn đồng hành bảo vệ an toàn.",
+    "explanation": "Theo quy định của Google, trẻ vị thành niên cần có sự đồng ý, trợ giúp và quản lí của phụ huynh khi đăng kí tài khoản.",
+    "commonMistake": "Tưởng rằng đăng kí Gmail mất phí hoặc bắt buộc phải có tài khoản ngân hàng.",
+    "remedy": "Dịch vụ Gmail là miễn phí, nhưng học sinh nhỏ tuổi cần cha mẹ đồng ý và hỗ trợ quản lí tài khoản."
+  },
+  {
+    "id": "C13",
+    "stage": 2,
+    "topic": "Tạo tài khoản & sử dụng Gmail",
+    "level": "Biết",
+    "type": "mcq",
+    "question": "Khi mở hộp thư điện tử thành công, danh sách các thư nhận được thường nằm trong mục nào?",
+    "options": [
+      "Thư nháp.",
+      "Đã gửi.",
+      "Hộp thư đến.",
+      "Đã tạm ẩn."
+    ],
+    "answer": 2,
+    "hint": "Tên thư mục này thể hiện nơi chứa các thư từ người khác gửi tới cho em.",
+    "explanation": "Khi đăng nhập hộp thư, danh sách các thư người khác gửi tới sẽ hiển thị trong mục 'Hộp thư đến' (Inbox).",
+    "commonMistake": "Nhầm 'Hộp thư đến' với 'Thư nháp' (thư viết dở chưa gửi) hoặc 'Đã gửi' (thư mình đã gửi đi).",
+    "remedy": "Ghi nhớ ý nghĩa 3 ngăn chính: Hộp thư đến (nhận), Đã gửi (đã chuyển đi), Thư nháp (đang viết dở)."
+  },
+  {
+    "id": "C14",
+    "stage": 2,
+    "topic": "Tạo tài khoản & sử dụng Gmail",
+    "level": "Biết",
+    "type": "mcq",
+    "question": "Trong giao diện Gmail, để bắt đầu viết một bức thư điện tử mới, em nháy chuột vào nút lệnh nào?",
+    "options": [
+      "Hộp thư đến.",
+      "Soạn thư.",
+      "Đăng xuất.",
+      "Tìm kiếm trong thư."
+    ],
+    "answer": 1,
+    "hint": "Nút lệnh này thường nằm ở góc trên bên trái màn hình, có biểu tượng cây bút.",
+    "explanation": "Nút lệnh 'Soạn thư' dùng để mở cửa sổ viết một bức thư điện tử mới.",
+    "commonMistake": "Nhầm với nút 'Hộp thư đến' hoặc thanh tìm kiếm.",
+    "remedy": "Muốn viết thư mới → nhấn vào nút 'Soạn thư' ở góc trên bên trái."
+  },
+  {
+    "id": "C15",
+    "stage": 2,
+    "topic": "Tạo tài khoản & sử dụng Gmail",
+    "level": "Biết",
+    "type": "mcq",
+    "question": "Khi soạn thư điện tử trong Gmail, nút lệnh có biểu tượng chiếc kẹp giấy dùng để làm gì?",
+    "options": [
+      "Gửi kèm tệp.",
+      "Xóa thư đang soạn.",
+      "Định dạng chữ đậm, nghiêng.",
+      "Chèn biểu tượng cảm xúc."
+    ],
+    "answer": 0,
+    "hint": "Trong thực tế, chiếc kẹp giấy dùng để ghim thêm tài liệu vào tờ giấy chính.",
+    "explanation": "Biểu tượng chiếc kẹp giấy trong cửa sổ soạn thư dùng để đính kèm tệp (văn bản, hình ảnh, âm thanh...) gửi theo thư.",
+    "commonMistake": "Nhầm biểu tượng kẹp giấy với biểu tượng thùng rác (xóa) hoặc mặt cười (cảm xúc).",
+    "remedy": "Nhớ hình ảnh trực quan: chiếc kẹp giấy = đính kèm thêm tệp tin vào email."
+  },
+  {
+    "id": "C16",
+    "stage": 2,
+    "topic": "Tạo tài khoản & sử dụng Gmail",
+    "level": "Biết",
+    "type": "mcq",
+    "question": "Thao tác nào cần thực hiện sau khi sử dụng xong hộp thư điện tử để tránh bị người khác sử dụng tài khoản của mình?",
+    "options": [
+      "Tắt màn hình máy tính.",
+      "Đăng xuất khỏi hộp thư.",
+      "Xóa toàn bộ thư đã nhận.",
+      "Đóng cửa sổ trình duyệt web."
+    ],
+    "answer": 1,
+    "hint": "Nếu chỉ tắt màn hình hoặc đóng trình duyệt, người sau mở lại vẫn có thể vào thẳng hộp thư của em.",
+    "explanation": "Cần thực hiện thao tác 'Đăng xuất' khỏi hộp thư khi dùng xong, đặc biệt trên máy tính dùng chung ở phòng thực hành.",
+    "commonMistake": "Cho rằng chỉ cần tắt màn hình hoặc nhấn dấu X đóng trình duyệt là tài khoản tự thoát.",
+    "remedy": "Luôn nháy vào biểu tượng tài khoản góc trên bên phải và chọn 'Đăng xuất' trước khi rời máy."
+  },
+  {
+    "id": "C17",
+    "stage": 2,
+    "topic": "Ưu điểm & hạn chế của email",
+    "level": "Hiểu",
+    "type": "mcq",
+    "question": "So với thư truyền thống gửi qua đường bưu điện, dịch vụ thư điện tử có ưu điểm nổi bật nào về thời gian?",
+    "options": [
+      "Thời gian gửi và nhận nhanh, gần như tức thời.",
+      "Không cần kết nối mạng vẫn có thể gửi thư đi ngay lập tức.",
+      "Người nhận phải chờ nhân viên bưu điện phát thư tận nhà.",
+      "Thư chỉ được chuyển đi vào các ngày làm việc trong tuần."
+    ],
+    "answer": 0,
+    "hint": "Chỉ sau vài giây nhấn nút Gửi, người ở nửa vòng Trái Đất cũng có thể nhận được thư.",
+    "explanation": "Ưu điểm nổi bật của thư điện tử là thời gian gửi và nhận rất nhanh, gần như tức thời so với thư bưu điện mất nhiều ngày.",
+    "commonMistake": "Cho rằng email không cần mạng Internet vẫn gửi được.",
+    "remedy": "Thư điện tử truyền qua Internet nên tốc độ gần như tức thời, hoạt động 24/7."
+  },
+  {
+    "id": "C18",
+    "stage": 2,
+    "topic": "Ưu điểm & hạn chế của email",
+    "level": "Hiểu",
+    "type": "mcq",
+    "question": "Khả năng gửi thông tin của thư điện tử có điểm gì vượt trội hơn so với thư giấy truyền thống?",
+    "options": [
+      "Có thể gửi thư cùng lúc cho nhiều người và đính kèm nhiều loại tệp.",
+      "Có thể gửi kèm các vật phẩm nặng và hàng hóa cồng kềnh.",
+      "Không bao giờ bị thất lạc hay gặp sự cố từ phía người gửi.",
+      "Tự động dịch nội dung bức thư sang mọi ngôn ngữ trên thế giới."
+    ],
+    "answer": 0,
+    "hint": "Một bức email có thể gửi cho cả lớp cùng lúc kèm theo tệp ảnh, nhạc, văn bản.",
+    "explanation": "Thư điện tử cho phép gửi đồng thời một bức thư cho nhiều người nhận và đính kèm nhiều dạng tệp tin khác nhau.",
+    "commonMistake": "Nghĩ rằng thư điện tử có thể gửi hàng hóa vật lí cồng kềnh (việc đó thuộc về bưu phẩm chuyển phát).",
+    "remedy": "Email chỉ truyền tải thông tin số (văn bản, tệp đính kèm) tới nhiều người cùng lúc rất tiện lợi."
+  },
+  {
+    "id": "C19",
+    "stage": 2,
+    "topic": "Ưu điểm & hạn chế của email",
+    "level": "Hiểu",
+    "type": "mcq",
+    "question": "Hạn chế nào sau đây thuộc về dịch vụ thư điện tử?",
+    "options": [
+      "Chi phí gửi mỗi bức thư rất cao so với gọi điện thoại.",
+      "Phải có thiết bị điện tử kết nối mạng mới sử dụng được.",
+      "Không thể lưu trữ và tìm kiếm lại các bức thư cũ đã gửi.",
+      "Chỉ gửi được nội dung văn bản, không gửi được hình ảnh."
+    ],
+    "answer": 1,
+    "hint": "Nếu mất điện hoặc không có Internet, em có vào được hộp thư điện tử không?",
+    "explanation": "Hạn chế của thư điện tử là bắt buộc phải có thiết bị điện tử (máy tính, điện thoại thông minh...) kết nối mạng Internet mới dùng được.",
+    "commonMistake": "Nhầm lẫn email tốn nhiều chi phí hoặc không gửi được hình ảnh.",
+    "remedy": "Điều kiện tiên quyết để dùng email là: Thiết bị điện tử + Kết nối Internet."
+  },
+  {
+    "id": "C20",
+    "stage": 2,
+    "topic": "Ưu điểm & hạn chế của email",
+    "level": "Hiểu",
+    "type": "mcq",
+    "question": "Khi sử dụng dịch vụ thư điện tử, người dùng có thể gặp phải những nguy cơ và phiền toái nào?",
+    "options": [
+      "Bị hỏng bàn phím máy tính do gõ văn bản quá nhiều.",
+      "Bị làm phiền bởi thư rác, thư giả mạo lừa đảo hoặc nhiễm virus.",
+      "Bị khóa thiết bị điện tử nếu không gửi thư hằng ngày.",
+      "Bị mất toàn bộ dữ liệu trong ổ cứng khi mở hộp thư đến."
+    ],
+    "answer": 1,
+    "hint": "Kẻ xấu thường gửi quảng cáo tràn lan hoặc đính kèm tệp độc hại qua email.",
+    "explanation": "Khi sử dụng thư điện tử, người dùng có thể bị làm phiền bởi thư rác (spam), thư giả mạo lừa đảo hoặc nhiễm virus máy tính.",
+    "commonMistake": "Chọn các phương án phi thực tế như hỏng bàn phím hay bị khóa máy nếu không gửi thư.",
+    "remedy": "Luôn cảnh giác với thư rác, thư lừa đảo trúng thưởng và tệp đính kèm từ người lạ."
+  },
+  {
+    "id": "C21",
+    "stage": 3,
+    "topic": "Quy tắc địa chỉ & mật khẩu",
+    "level": "Hiểu",
+    "type": "mcq",
+    "question": "Địa chỉ thư điện tử nào sau đây viết ĐÚNG quy tắc?",
+    "options": [
+      "minhtuan.gmail.com",
+      "Hoangth&hotmail.com",
+      "thu_hoai.432@yahoo.com",
+      "www.nxbgd.vn"
+    ],
+    "answer": 2,
+    "hint": "Kiểm tra xem địa chỉ nào có đúng kí tự @ ở giữa và không chứa kí tự cấm như &.",
+    "explanation": "thu_hoai.432@yahoo.com viết đúng quy tắc: có tên đăng nhập hợp lệ (chữ cái, số, dấu gạch dưới, dấu chấm), kí tự @ và tên miền máy chủ yahoo.com.",
+    "commonMistake": "Chọn minhtuan.gmail.com (thiếu @) hoặc www.nxbgd.vn (đây là địa chỉ trang web).",
+    "remedy": "Kiểm tra đủ 3 phần: <tên đăng nhập hợp lệ> + @ + <tên miền máy chủ>."
+  },
+  {
+    "id": "C22",
+    "stage": 3,
+    "topic": "Quy tắc địa chỉ & mật khẩu",
+    "level": "Hiểu",
+    "type": "mcq",
+    "question": "Vì sao địa chỉ thư điện tử minhtuan.gmail.com là không hợp lệ?",
+    "options": [
+      "Vì thiếu kí tự @ ngăn cách tên đăng nhập và địa chỉ máy chủ.",
+      "Vì tên đăng nhập không được phép chứa chữ cái viết thường.",
+      "Vì địa chỉ máy chủ gmail.com không hỗ trợ dịch vụ miễn phí.",
+      "Vì tên đăng nhập bắt buộc phải có chứa các chữ số đi kèm."
+    ],
+    "answer": 0,
+    "hint": "Quan sát giữa 'minhtuan' và 'gmail.com' đang dùng dấu gì?",
+    "explanation": "Địa chỉ minhtuan.gmail.com không hợp lệ vì dùng dấu chấm thay cho kí tự bắt buộc @ để ngăn cách tên đăng nhập và địa chỉ máy chủ.",
+    "commonMistake": "Tưởng rằng tên đăng nhập bắt buộc phải có chữ số hoặc chữ in hoa.",
+    "remedy": "Sửa lại cho đúng phải là: minhtuan@gmail.com."
+  },
+  {
+    "id": "C23",
+    "stage": 3,
+    "topic": "Quy tắc địa chỉ & mật khẩu",
+    "level": "Hiểu",
+    "type": "mcq",
+    "question": "Khi đặt mật khẩu cho tài khoản thư điện tử, người dùng nên thực hiện như thế nào để đảm bảo an toàn?",
+    "options": [
+      "Sử dụng ngày tháng năm sinh để dễ nhớ và không bao giờ quên.",
+      "Đặt mật khẩu giống hệt với tên đăng nhập để thuận tiện truy cập.",
+      "Sử dụng từ 8 kí tự trở lên, kết hợp chữ cái, chữ số và kí tự đặc biệt.",
+      "Chỉ sử dụng các chữ số từ 0 đến 9 với độ dài đúng 4 kí tự."
+    ],
+    "answer": 2,
+    "hint": "Mật khẩu mạnh cần đủ dài và kết hợp nhiều loại kí tự khác nhau.",
+    "explanation": "Để bảo mật an toàn cho tài khoản, nên đặt mật khẩu từ 8 kí tự trở lên, kết hợp chữ cái (hoa, thường), chữ số và kí tự đặc biệt.",
+    "commonMistake": "Thói quen đặt mật khẩu theo ngày sinh hoặc 123456 vì dễ nhớ nhưng rất dễ bị dò ra.",
+    "remedy": "Áp dụng nguyên tắc mật khẩu mạnh: ≥ 8 kí tự + Chữ hoa + Chữ thường + Số + Kí tự đặc biệt."
+  },
+  {
+    "id": "C24",
+    "stage": 3,
+    "topic": "Quy trình soạn & quản lí thư",
+    "level": "Hiểu",
+    "type": "mcq",
+    "question": "Trong quá trình soạn thư điện tử, ô 'Chủ đề' (Subject) có tác dụng gì?",
+    "options": [
+      "Nhập địa chỉ hộp thư điện tử của người nhận thư.",
+      "Ghi tóm tắt ngắn gọn nội dung chính của bức thư.",
+      "Nhập mật khẩu xác nhận trước khi nhấn nút Gửi thư.",
+      "Đính kèm các tệp hình ảnh hoặc văn bản từ máy tính."
+    ],
+    "answer": 1,
+    "hint": "Người nhận nhìn vào dòng này trước tiên để biết bức thư nói về việc gì.",
+    "explanation": "Ô 'Chủ đề' (Subject) dùng để ghi tóm tắt ngắn gọn nội dung chính của bức thư, giúp người nhận dễ nắm bắt và phân loại.",
+    "commonMistake": "Gõ địa chỉ người nhận vào ô Chủ đề hoặc bỏ trống ô Chủ đề.",
+    "remedy": "Ô 'Đến' (To) nhập địa chỉ email người nhận; ô 'Chủ đề' (Subject) ghi tiêu đề tóm tắt nội dung thư."
+  },
+  {
+    "id": "C25",
+    "stage": 3,
+    "topic": "Quy trình soạn & quản lí thư",
+    "level": "Hiểu",
+    "type": "mcq",
+    "question": "Khi muốn đọc nội dung một bức thư có trong 'Hộp thư đến', em thực hiện thao tác nào?",
+    "options": [
+      "Nháy chuột vào nút Soạn thư ở góc trên bên trái.",
+      "Nháy chuột vào Tên người gửi hoặc Tiêu đề thư đó.",
+      "Nháy chuột vào biểu tượng tài khoản để chọn Đăng xuất.",
+      "Nháy chuột vào mục Thư nháp ở danh sách bên trái."
+    ],
+    "answer": 1,
+    "hint": "Mỗi dòng thư trong danh sách hiển thị tên người gửi và tiêu đề của bức thư.",
+    "explanation": "Để mở xem toàn bộ nội dung một bức thư, em nháy chuột trực tiếp vào Tên người gửi hoặc Tiêu đề thư đó trong Hộp thư đến.",
+    "commonMistake": "Nhầm thao tác mở đọc thư với thao tác viết thư mới (Soạn thư).",
+    "remedy": "Trong Hộp thư đến, nhấn trực tiếp vào dòng tiêu đề bức thư muốn đọc."
+  },
+  {
+    "id": "C26",
+    "stage": 3,
+    "topic": "Quy trình soạn & quản lí thư",
+    "level": "Hiểu",
+    "type": "mcq",
+    "question": "Điều gì sẽ xảy ra nếu em nhập sai địa chỉ thư điện tử của người nhận khi gửi thư?",
+    "options": [
+      "Hệ thống sẽ tự động sửa lại địa chỉ đúng và gửi thư đi.",
+      "Thư không gửi đến đúng người nhận hoặc bị báo lỗi không gửi được.",
+      "Tài khoản thư điện tử của em sẽ bị khóa vĩnh viễn ngay lập tức.",
+      "Nội dung bức thư sẽ được chuyển sang mục Thư rác của bạn bè."
+    ],
+    "answer": 1,
+    "hint": "Máy chủ chỉ chuyển thư theo đúng chuỗi kí tự địa chỉ mà em đã nhập.",
+    "explanation": "Vì mỗi địa chỉ email là duy nhất nên nếu nhập sai dù chỉ một kí tự, thư sẽ không tới được đúng người nhận hoặc hệ thống báo lỗi không gửi được.",
+    "commonMistake": "Tưởng rằng hệ thống tự đoán được người nhận để sửa địa chỉ hoặc khóa tài khoản người gửi.",
+    "remedy": "Luôn kiểm tra kĩ từng kí tự địa chỉ email của người nhận trước khi nhấn nút Gửi."
+  },
+  {
+    "id": "C27",
+    "stage": 3,
+    "topic": "Quy tắc địa chỉ & mật khẩu",
+    "level": "Hiểu",
+    "type": "mcq",
+    "question": "Một người có thể đăng kí và sử dụng nhiều tài khoản thư điện tử khác nhau được không?",
+    "options": [
+      "Không, vì mỗi công dân chỉ được cấp một địa chỉ email duy nhất.",
+      "Được, miễn là mỗi tài khoản có một địa chỉ thư riêng không trùng lặp.",
+      "Không, vì máy tính chỉ cho phép đăng nhập một tài khoản duy nhất.",
+      "Được, nhưng phải sử dụng các máy tính khác nhau cho từng tài khoản."
+    ],
+    "answer": 1,
+    "hint": "Ví dụ em có thể có một email phục vụ học tập và một email khác để giải trí.",
+    "explanation": "Một người hoàn toàn có thể đăng kí và sử dụng nhiều tài khoản thư điện tử khác nhau, miễn sao mỗi tài khoản có một địa chỉ riêng không trùng lặp.",
+    "commonMistake": "Nhầm quy định mỗi địa chỉ là duy nhất với giới hạn số lượng tài khoản của một người.",
+    "remedy": "Một người được tạo nhiều tài khoản email trên cùng một máy tính hoặc điện thoại."
+  },
+  {
+    "id": "C28",
+    "stage": 3,
+    "topic": "Quy tắc địa chỉ & mật khẩu",
+    "level": "Hiểu",
+    "type": "mcq",
+    "question": "Khi tạo tài khoản thư điện tử miễn phí trên Google, thông tin nào sau đây người dùng KHÔNG bắt buộc phải khai báo?",
+    "options": [
+      "Họ và tên của người đăng kí.",
+      "Tên người dùng (tên đăng nhập).",
+      "Địa chỉ nhà riêng cụ thể.",
+      "Mật khẩu và xác nhận mật khẩu."
+    ],
+    "answer": 2,
+    "hint": "Biểu mẫu đăng kí tài khoản trực tuyến chỉ yêu cầu thông tin định danh tài khoản chứ không yêu cầu số nhà, thôn xóm.",
+    "explanation": "Khi đăng kí tài khoản Gmail, người dùng cần khai báo Họ tên, Tên người dùng, Mật khẩu... nhưng không bắt buộc khai báo địa chỉ nhà riêng cụ thể.",
+    "commonMistake": "Nghĩ rằng đăng kí email cũng giống như làm hồ sơ giấy nên phải ghi địa chỉ thường trú.",
+    "remedy": "Không cần cung cấp địa chỉ nhà riêng khi tạo email; đồng thời giúp bảo vệ thông tin cá nhân trên mạng."
+  },
+  {
+    "id": "C29",
+    "stage": 3,
+    "topic": "Ứng dụng AI trong thư điện tử",
+    "level": "Hiểu",
+    "type": "mcq",
+    "question": "Trong dịch vụ thư điện tử hiện nay, tính năng 'Bộ lọc thư rác tự động' hoạt động dựa trên cơ chế nào?",
+    "options": [
+      "Sử dụng trí tuệ nhân tạo (AI) phân tích từ khóa, địa chỉ gửi và hành vi người dùng.",
+      "Yêu cầu người gửi phải gọi điện thoại xác nhận trước khi gửi thư.",
+      "Chỉ cho phép nhận thư từ những người có cùng nhà cung cấp dịch vụ.",
+      "Chặn toàn bộ các bức thư có đính kèm tệp hình ảnh hoặc văn bản."
+    ],
+    "answer": 0,
+    "hint": "Công nghệ thông minh giúp máy chủ tự động nhận diện hàng tỉ thư quảng cáo mỗi ngày.",
+    "explanation": "Hệ thống lọc thư rác tự động ứng dụng Trí tuệ nhân tạo (AI) để phân tích từ khóa đáng ngờ, địa chỉ người gửi và thói quen xử lí thư của người dùng.",
+    "commonMistake": "Cho rằng email chặn toàn bộ thư có tệp đính kèm hoặc chỉ nhận thư cùng nhà cung cấp.",
+    "remedy": "AI giúp tự động phân loại thư quảng cáo/lừa đảo vào mục Thư rác (Spam) để giữ Hộp thư đến sạch sẽ."
+  },
+  {
+    "id": "C30",
+    "stage": 3,
+    "topic": "Ứng dụng AI trong thư điện tử",
+    "level": "Hiểu",
+    "type": "mcq",
+    "question": "Tính năng 'Gợi ý trả lời nhanh' (Smart Reply) ở cuối thư điện tử mang lại lợi ích gì cho người sử dụng?",
+    "options": [
+      "Giúp tiết kiệm thời gian phản hồi các bức thư ngắn gọn.",
+      "Tự động xóa toàn bộ thư quảng cáo trong hộp thư đến.",
+      "Giúp tăng dung lượng lưu trữ miễn phí của hộp thư điện tử.",
+      "Tự động đổi mật khẩu định kì để bảo vệ tài khoản an toàn."
+    ],
+    "answer": 0,
+    "hint": "Ở cuối thư thường hiện sẵn các nút mẫu câu ngắn như 'Cảm ơn bạn!', 'Tôi đã nhận được rồi'.",
+    "explanation": "Tính năng Gợi ý trả lời nhanh (Smart Reply) đề xuất các câu phản hồi ngắn phù hợp ngữ cảnh, giúp người dùng tiết kiệm thời gian gõ phím.",
+    "commonMistake": "Nhầm tính năng gợi ý trả lời với tính năng tăng dung lượng lưu trữ hoặc đổi mật khẩu.",
+    "remedy": "Smart Reply = Gợi ý câu trả lời ngắn gọn chỉ với một cú nháy chuột."
+  },
+  {
+    "id": "C31",
+    "stage": 3,
+    "topic": "Ứng dụng AI trong thư điện tử",
+    "level": "Hiểu",
+    "type": "mcq",
+    "question": "Mặt hạn chế cần lưu ý của các tính năng tích hợp AI trong dịch vụ thư điện tử (như lọc thư rác, gợi ý trả lời) là gì?",
+    "options": [
+      "Làm cho tốc độ gửi thư bị chậm đi nhiều ngày so với bình thường.",
+      "Có thể lọc nhầm thư quan trọng vào mục thư rác hoặc ảnh hưởng quyền riêng tư.",
+      "Không thể sử dụng được trên các máy tính để bàn ở phòng thực hành.",
+      "Yêu cầu người dùng phải trả thêm phí dịch vụ hằng tháng cho nhà cung cấp."
+    ],
+    "answer": 1,
+    "hint": "Đôi khi em tìm mãi không thấy thư thầy cô gửi trong Hộp thư đến mà lại thấy nằm ở mục Spam.",
+    "explanation": "AI hoạt động tự động nên đôi khi có thể nhận diện nhầm thư quan trọng đưa vào mục Thư rác, đồng thời việc hệ thống quét nội dung thư cũng đặt ra lưu ý về quyền riêng tư.",
+    "commonMistake": "Nghĩ rằng AI làm chậm tốc độ gửi thư nhiều ngày hoặc thu phí hằng tháng.",
+    "remedy": "Thỉnh thoảng nên kiểm tra mục Thư rác (Spam) để tránh bỏ sót thư quan trọng bị AI lọc nhầm."
+  },
+  {
+    "id": "C32",
+    "stage": 3,
+    "topic": "Quy trình soạn & quản lí thư",
+    "level": "Hiểu",
+    "type": "mcq",
+    "question": "Trong các bước soạn và gửi thư mới dưới đây, thứ tự thực hiện nào là đúng?",
+    "options": [
+      "Nhập nội dung thư → Nháy nút Soạn thư → Nhập địa chỉ người nhận → Nháy nút Gửi.",
+      "Nháy nút Soạn thư → Nhập địa chỉ người nhận, chủ đề, nội dung → Nháy nút Gửi.",
+      "Nhập địa chỉ người nhận → Nháy nút Gửi → Nháy nút Soạn thư → Nhập chủ đề thư.",
+      "Nháy nút Gửi → Nháy nút Soạn thư → Đính kèm tệp → Nhập địa chỉ người nhận."
+    ],
+    "answer": 1,
+    "hint": "Muốn viết được thư thì bước đầu tiên phải mở khung soạn thảo, và bước cuối cùng mới là gửi đi.",
+    "explanation": "Quy trình chuẩn để soạn và gửi thư mới là: Nháy nút Soạn thư → Nhập địa chỉ người nhận, chủ đề, nội dung (và đính kèm tệp nếu có) → Nháy nút Gửi.",
+    "commonMistake": "Đảo lộn bước mở khung Soạn thư hoặc nhấn Gửi trước khi nhập thông tin.",
+    "remedy": "Nhớ trình tự 3 bước logic: Mở khung (Soạn thư) → Điền thông tin → Chuyển đi (Gửi)."
+  },
+  {
+    "id": "C33",
+    "stage": 4,
+    "topic": "Vận dụng thực tế & an toàn email",
+    "level": "Vận dụng",
+    "type": "mcq",
+    "question": "Sau giờ thực hành môn Tin học tại phòng máy của trường, bạn Minh vội ra về mà quên đăng xuất tài khoản thư điện tử của mình. Nguy cơ nào sau đây có thể xảy ra với Minh?",
+    "options": [
+      "Người ngồi sau có thể dùng tài khoản của Minh để đọc trộm thư hoặc gửi thư xấu.",
+      "Máy tính ở phòng thực hành sẽ tự động xóa hết các phần mềm học tập.",
+      "Địa chỉ thư điện tử của Minh sẽ bị nhà cung cấp dịch vụ thu hồi ngay lập tức.",
+      "Toàn bộ các tệp bài tập Minh đã lưu trên máy tính ở nhà sẽ bị mất sạch."
+    ],
+    "answer": 0,
+    "hint": "Hộp thư của Minh vẫn đang mở sẵn trên trình duyệt của máy tính đó.",
+    "explanation": "Nếu quên đăng xuất trên máy tính dùng chung ở phòng thực hành, học sinh ca sau có thể truy cập trái phép để đọc trộm thư, đổi mật khẩu hoặc mạo danh gửi thư xấu.",
+    "commonMistake": "Nghĩ rằng quên đăng xuất sẽ làm mất tệp ở máy tính tại nhà hoặc xóa phần mềm trên máy.",
+    "remedy": "Tạo thói quen kiểm tra và nhấn 'Đăng xuất' trước khi rời khỏi phòng máy thực hành."
+  },
+  {
+    "id": "C34",
+    "stage": 4,
+    "topic": "Vận dụng thực tế & an toàn email",
+    "level": "Vận dụng",
+    "type": "mcq",
+    "question": "Bạn Lan nhận được một thư điện tử từ người lạ với tiêu đề: 'Chúc mừng! Bạn đã trúng một chuyến đi miễn phí đến Mĩ, hãy nháy chuột nhanh để nhận quà'. Cách xử lí nào sau đây của Lan là an toàn nhất?",
+    "options": [
+      "Nháy ngay vào đường liên kết trong thư để điền thông tin nhận thưởng.",
+      "Chuyển tiếp bức thư này cho tất cả các bạn trong lớp cùng nháy chuột.",
+      "Xóa thư hoặc đánh dấu là thư rác, tuyệt đối không mở liên kết lạ.",
+      "Trả lời lại bức thư để hỏi rõ địa chỉ công ti tổ chức chương trình khuyến mãi."
+    ],
+    "answer": 2,
+    "hint": "Những thông báo trúng thưởng bất ngờ từ người lạ thường là bẫy lừa đảo hoặc chứa mã độc.",
+    "explanation": "Đây là dấu hiệu điển hình của thư giả mạo lừa đảo (phishing). Cách xử lí an toàn nhất là xóa thư hoặc báo cáo thư rác, tuyệt đối không nháy vào liên kết lạ.",
+    "commonMistake": "Tò mò nháy vào đường link nhận thưởng hoặc chuyển tiếp cho bạn bè gây lây lan rủi ro.",
+    "remedy": "Nguyên tắc 3 KHÔNG với email lạ: Không tin trúng thưởng bất ngờ – Không bấm link lạ – Không chia sẻ tiếp."
+  },
+  {
+    "id": "C35",
+    "stage": 4,
+    "topic": "Vận dụng thực tế & an toàn email",
+    "level": "Vận dụng",
+    "type": "mcq",
+    "question": "Lớp 6A cần gửi tệp ảnh chụp tập thể lớp ngày khai trường (dung lượng 5 MB) cho cô giáo chủ nhiệm ở xa để cô làm báo cáo. Phương án nào sau đây là thuận tiện và tiết kiệm nhất?",
+    "options": [
+      "In ảnh ra giấy rồi gửi qua đường bưu điện chuyển phát nhanh.",
+      "Soạn thư điện tử, đính kèm tệp ảnh đó và gửi đến địa chỉ email của cô giáo.",
+      "Đọc mô tả chi tiết từng bạn trong bức ảnh qua điện thoại cho cô giáo nghe.",
+      "Sao chép tệp ảnh vào đĩa CD rồi nhờ người quen mang đến tận nhà cô giáo."
+    ],
+    "answer": 1,
+    "hint": "Gmail cho phép đính kèm tệp lên tới 25 MB hoàn toàn miễn phí và gửi đi trong vài giây.",
+    "explanation": "Tệp ảnh 5 MB nằm gọn trong giới hạn đính kèm của thư điện tử (tối đa 25 MB với Gmail), nên gửi qua email vừa nhanh chóng, giữ nguyên chất lượng ảnh vừa miễn phí.",
+    "commonMistake": "Chọn cách in ảnh gửi bưu điện hoặc ghi đĩa CD vừa tốn kém chi phí vừa mất nhiều thời gian.",
+    "remedy": "Sử dụng biểu tượng chiếc kẹp giấy trong email để đính kèm các tệp hình ảnh, văn bản gửi thầy cô."
+  },
+  {
+    "id": "C36",
+    "stage": 4,
+    "topic": "Vận dụng thực tế & an toàn email",
+    "level": "Vận dụng",
+    "type": "mcq",
+    "question": "Bạn Nam đăng kí tài khoản Gmail với tên đăng nhập là namlop6a nhưng hệ thống báo lỗi tên người dùng đã có người sử dụng. Bạn Nam nên làm gì để tạo được tài khoản?",
+    "options": [
+      "Thêm các con số hoặc kí tự phù hợp vào tên đăng nhập (ví dụ: namlop6a.sontrung).",
+      "Tắt máy tính và chuyển sang sử dụng dịch vụ gửi thư qua đường bưu điện.",
+      "Nhập lại nhiều lần tên namlop6a cho đến khi hệ thống chấp nhận.",
+      "Đổi phần đuôi @gmail.com thành @yahoo.com ngay trên trang đăng kí của Google."
+    ],
+    "answer": 0,
+    "hint": "Vì mỗi địa chỉ email là duy nhất trên toàn cầu nên Nam cần tạo sự khác biệt cho tên đăng nhập.",
+    "explanation": "Khi tên đăng nhập bị trùng với người đã đăng kí trước, Nam cần thêm chữ số, năm sinh hoặc tên trường (ví dụ: namlop6a.sontrung) để tạo địa chỉ duy nhất.",
+    "commonMistake": "Cố gắng nhập lại tên cũ nhiều lần hoặc gõ đuôi @yahoo.com trên trang đăng kí của Google.",
+    "remedy": "Khi bị báo trùng tên đăng nhập, hãy bổ sung số hoặc dấu chấm kèm từ gợi nhớ riêng."
+  },
+  {
+    "id": "C37",
+    "stage": 4,
+    "topic": "Vận dụng thực tế & an toàn email",
+    "level": "Vận dụng",
+    "type": "mcq",
+    "question": "Trong hộp thư đến của bạn Hoa có các thư với tiêu đề sau. Thư nào là thư bình thường, đáng tin cậy phục vụ học tập?",
+    "options": [
+      "'Cơ hội đầu tư kiếm được nhiều tiền hơn mỗi ngày'.",
+      "'Danh sách học sinh tham gia thi học sinh giỏi môn Tin học'.",
+      "'Quà tặng miễn phí, hãy nháy chuột nhanh trong 5 phút'.",
+      "'Khuyến mãi, ưu đãi giảm giá 90% dành riêng cho bạn'."
+    ],
+    "answer": 1,
+    "hint": "Hãy tìm tiêu đề liên quan trực tiếp đến hoạt động học tập tại trường.",
+    "explanation": "Thư có tiêu đề 'Danh sách học sinh tham gia thi học sinh giỏi môn Tin học' là thông tin học tập chính thống; các thư còn lại đều là thư quảng cáo hoặc lừa đảo.",
+    "commonMistake": "Bị thu hút bởi các tiêu đề giật gân về tiền bạc, quà tặng miễn phí, giảm giá 90%.",
+    "remedy": "Phân biệt rõ tiêu đề công việc/học tập nghiêm túc với các tiêu đề câu kéo lợi ích vật chất."
+  },
+  {
+    "id": "C38",
+    "stage": 4,
+    "topic": "Vận dụng thực tế & an toàn email",
+    "level": "Vận dụng",
+    "type": "mcq",
+    "question": "Khi gửi thư điện tử nộp bài tập thực hành cho thầy giáo, bạn An quên không ghi nội dung vào ô 'Chủ đề' và không ghi lời chào trong thư. Theo em, An nên rút kinh nghiệm điều gì cho lần gửi sau?",
+    "options": [
+      "Cần ghi chủ đề ngắn gọn, rõ ràng (ví dụ: Bai tap Tin hoc 6 - An) và dùng lời lẽ lịch sự.",
+      "Chỉ cần gửi tệp đính kèm là đủ, không cần viết bất kì chữ nào trong bức thư.",
+      "Nên viết toàn bộ nội dung bài tập vào ô Chủ đề để thầy giáo dễ đọc hơn.",
+      "Nên gửi cùng một bức thư đó liên tiếp 10 lần để thầy giáo chú ý."
+    ],
+    "answer": 0,
+    "hint": "Giao tiếp qua thư điện tử cũng cần văn minh, lịch sự như khi viết thư tay hoặc thưa chuyện trực tiếp.",
+    "explanation": "Khi gửi email cho thầy cô, cần ghi chủ đề ngắn gọn thể hiện rõ nội dung và họ tên, đồng thời có lời chào, lời cảm ơn lịch sự, văn minh.",
+    "commonMistake": "Gửi thư trống không tiêu đề, không lời chào hoặc gửi lặp lại nhiều lần gây phiền cho người nhận.",
+    "remedy": "Quy tắc viết email chuẩn mực: Chủ đề rõ ràng + Lời chào trân trọng + Nội dung mạch lạc + Kí tên."
+  },
+  {
+    "id": "C39",
+    "stage": 4,
+    "topic": "Vận dụng thực tế & an toàn email",
+    "level": "Vận dụng",
+    "type": "mcq",
+    "question": "Bạn Hùng muốn gửi cùng một thông báo về lịch họp nhóm học tập cho 5 bạn trong tổ qua thư điện tử. Cách làm nào giúp Hùng tiết kiệm thời gian nhất?",
+    "options": [
+      "Soạn một bức thư chung, nhập cả 5 địa chỉ email của các bạn vào mục Người nhận và nhấn Gửi.",
+      "Soạn 5 bức thư khác nhau và gửi lần lượt từng thư cách nhau 10 phút.",
+      "Gửi thư cho 1 bạn trước, sau đó nhờ bạn đó in ra giấy phát cho 4 bạn còn lại.",
+      "Tạo 5 tài khoản thư điện tử mới để gửi riêng cho từng bạn trong nhóm."
+    ],
+    "answer": 0,
+    "hint": "Ô 'Đến' (Người nhận) cho phép nhập nhiều địa chỉ email cùng lúc.",
+    "explanation": "Thư điện tử cho phép gửi đồng thời cùng một nội dung tới nhiều địa chỉ người nhận chỉ trong một lần soạn và gửi, giúp tiết kiệm tối đa thời gian.",
+    "commonMistake": "Soạn lặp lại 5 bức thư giống hệt nhau hoặc kết hợp gửi giấy thủ công.",
+    "remedy": "Nhập danh sách nhiều địa chỉ email vào mục Người nhận để gửi thư nhóm chỉ với 1 lần nhấn Gửi."
+  },
+  {
+    "id": "C40",
+    "stage": 4,
+    "topic": "Vận dụng thực tế & an toàn email",
+    "level": "Vận dụng",
+    "type": "mcq",
+    "question": "Cuối học kì, lớp trưởng muốn tìm lại bức thư chứa 'Kế hoạch ngoại khóa' mà giáo viên chủ nhiệm đã gửi từ đầu năm học trong hàng trăm thư ở hộp thư đến. Cách làm nào nhanh chóng và hiệu quả nhất?",
+    "options": [
+      "Gõ từ khóa 'Kế hoạch ngoại khóa' vào ô Tìm kiếm trong thư trên giao diện hộp thư.",
+      "Mở lần lượt từng bức thư từ mới nhất đến cũ nhất để đọc kiểm tra nội dung.",
+      "Xóa bớt các bức thư mới nhận gần đây để bức thư cũ hiện lên trên cùng.",
+      "Gửi thư hỏi lại giáo viên chủ nhiệm để xin thầy gửi lại kế hoạch mới."
+    ],
+    "answer": 0,
+    "hint": "Phía trên cùng của giao diện Gmail có một thanh tìm kiếm rất mạnh mẽ.",
+    "explanation": "Dịch vụ thư điện tử hỗ trợ lưu trữ và tra cứu thông minh; chỉ cần nhập từ khóa 'Kế hoạch ngoại khóa' vào ô Tìm kiếm trong thư là hệ thống sẽ lọc ra ngay bức thư cần tìm.",
+    "commonMistake": "Mở dò thủ công hàng trăm thư hoặc xóa nhầm các thư quan trọng khác.",
+    "remedy": "Tận dụng thanh 'Tìm kiếm trong thư' bằng từ khóa tiêu đề hoặc tên người gửi để tìm thư trong tích tắc."
+  }
+];
+
+const CHARACTERS = [
+  { id: "c1", name: "Thám tử số", avatar: "🕵️", desc: "Tinh mắt phát hiện mọi lỗ hổng dữ liệu." },
+  { id: "c2", name: "Chú mèo công nghệ", avatar: "🐱‍💻", desc: "Nhanh nhẹn, thông thạo mọi phím tắt." },
+  { id: "c3", name: "Nhà khoa học trẻ", avatar: "🧑‍🔬", desc: "Tư duy logic, phân tích chuẩn xác." },
+  { id: "c4", name: "Siêu nhân tri thức", avatar: "🦸", desc: "Bản lĩnh vượt qua mọi thử thách khó." },
+  { id: "c5", name: "Nhà thám hiểm không gian", avatar: "🧑‍🚀", desc: "Khám phá chân trời công nghệ mới." },
+  { id: "c6", name: "Robot thông minh", avatar: "🤖", desc: "Xử lý thuật toán tốc độ cao." },
+  { id: "c7", name: "Chiến binh ánh sáng", avatar: "⚔️", desc: "Bảo vệ an toàn cho thế giới mạng." },
+  { id: "c8", name: "Phù thủy thuật toán", avatar: "🧙", desc: "Biến hóa vòng lặp và điều kiện tài tình." },
+  { id: "c9", name: "Hacker mũ trắng", avatar: "🥷", desc: "Chuyên gia phòng thủ và gỡ lỗi hệ thống." },
+  { id: "c10", name: "Nhà sáng chế tương lai", avatar: "👩‍🔧", desc: "Kiến tạo giải pháp số sáng tạo." }
+];
+
+const TITLES = [
+  { minXp: 0, name: "Tập sự tri thức" },
+  { minXp: 80, name: "Nhà khám phá số" },
+  { minXp: 180, name: "Chiến binh kiến thức" },
+  { minXp: 300, name: "Chuyên gia công nghệ" },
+  { minXp: 420, name: "Hiệp sĩ tri thức" },
+  { minXp: 550, name: "Bậc thầy chinh phục" }
+];
+
+const BADGES_DEF = [
+  { id: "b_first", icon: "🌟", name: "Bước chân đầu tiên", desc: "Hoàn thành trạm thử thách đầu tiên." },
+  { id: "b_safe", icon: "🛡️", name: "Hiệp sĩ an toàn mạng", desc: "Đạt tối đa 3 sao tại Trạm 2." },
+  { id: "b_algo", icon: "🧭", name: "Chuyên gia thuật toán", desc: "Đạt tối đa 3 sao tại Trạm 3." },
+  { id: "b_debug", icon: "🔧", name: "Bậc thầy gỡ lỗi", desc: "Sửa đúng ít nhất 3 câu trong Kho ôn tập." },
+  { id: "b_master", icon: "👑", name: "Nhà vô địch Sơn Trung", desc: "Hoàn thành toàn bộ hành trình trò chơi." }
+];
+
+let soundEnabled = true;
+let selectedCharId = "c1";
+let playerState = null;
+let currentStageId = null;
+let stageQuestions = [];
+let currentQIndex = 0;
+let stageScore = 0;
+let stageCorrectCount = 0;
+let currentQuestionAnswered = false;
+let currentUserSelection = null;
+let teacherAuthenticated = false;
+
+const LESSON_KEY_HASH = btoa(encodeURIComponent(GAME_CONFIG.gameTitle + "_" + GAME_CONFIG.lessonTitle)).slice(0, 16);
+const LS_PLAYER_KEY = "ST_GAME_PLAYER_" + LESSON_KEY_HASH;
+const LS_RECORDS_KEY = "ST_GAME_RECORDS_" + LESSON_KEY_HASH;
+const LS_WEBAPP_KEY = "ST_GAME_WEBAPP_URL";
+
+function playTone(type) {
+  if (!soundEnabled) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = type === "wrong" ? "sawtooth" : "sine";
+    osc.frequency.setValueAtTime(type === "wrong" ? 200 : 587.33, ctx.currentTime);
+    gain.gain.setValueAtTime(0.12, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+    osc.start(); osc.stop(ctx.currentTime + 0.35);
+  } catch (e) {}
+}
+function toggleSound() {
+  soundEnabled = !soundEnabled;
+  document.getElementById("btnSound").textContent = soundEnabled ? "🔊 Âm thanh: Bật" : "🔇 Âm thanh: Tắt";
+}
+window.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("ui-subject-tag").textContent = `MÔN ${GAME_CONFIG.subject.toUpperCase()} • ${GAME_CONFIG.bookSeries.toUpperCase()}`;
+  document.getElementById("ui-game-title").textContent = GAME_CONFIG.gameTitle;
+  document.getElementById("ui-lesson-subtitle").textContent = `${GAME_CONFIG.grade} | ${GAME_CONFIG.lessonTitle}`;
+  document.getElementById("ui-story-text").textContent = GAME_CONFIG.story;
+  document.getElementById("ui-goal-text").textContent = GAME_CONFIG.goal;
+  GAME_CONFIG.classes.forEach(cls => {
+    document.getElementById("inp-class").innerHTML += `<option value="${cls}">Lớp ${cls}</option>`;
+    document.getElementById("t-filter-class").innerHTML += `<option value="${cls}">Lớp ${cls}</option>`;
+  });
+  const charGrid = document.getElementById("char-grid");
+  CHARACTERS.forEach(ch => {
+    const div = document.createElement("div");
+    div.className = "char-card" + (ch.id === selectedCharId ? " selected" : "");
+    div.onclick = () => { selectedCharId = ch.id; document.querySelectorAll(".char-card").forEach(c => c.classList.remove("selected")); div.classList.add("selected"); };
+    div.innerHTML = `<span class="char-avatar">${ch.avatar}</span><div class="char-name">${ch.name}</div><div class="char-desc">${ch.desc}</div>`;
+    charGrid.appendChild(div);
+  });
+  [...new Set(QUESTION_BANK.map(q => q.topic))].forEach(t => {
+    document.getElementById("vault-filter-topic").innerHTML += `<option value="${t}">${t}</option>`;
+  });
+  const savedUrl = localStorage.getItem(LS_WEBAPP_KEY) || GAME_CONFIG.defaultWebAppUrl;
+  if (savedUrl) { document.getElementById("inp-webapp-url").value = savedUrl; document.getElementById("syncStatusBadge").textContent = "☁️ Sẵn sàng đồng bộ"; }
+  try { playerState = JSON.parse(localStorage.getItem(LS_PLAYER_KEY)); } catch (e) { playerState = null; }
+  checkResumeAvailability();
+});
+function savePlayerState() {
+  if (!playerState) return;
+  localStorage.setItem(LS_PLAYER_KEY, JSON.stringify(playerState));
+  updateHUD();
+  upsertLocalRecord();
+}
+function checkResumeAvailability() {
+  const btnCont = document.getElementById("btn-continue");
+  const banner = document.getElementById("resume-banner");
+  document.getElementById("vault-count-home").textContent = playerState && playerState.wrongIds ? playerState.wrongIds.length : 0;
+  if (playerState && playerState.name) {
+    const done = Object.values(playerState.stageResults || {}).filter(s => s.passed).length;
+    document.getElementById("resume-name").textContent = playerState.name;
+    document.getElementById("resume-class").textContent = "Lớp " + playerState.className;
+    document.getElementById("resume-progress").textContent = `Đã vượt qua ${done}/${GAME_CONFIG.stages.length} trạm • ${playerState.stars || 0} ⭐ • ${playerState.gold || 0} 🪙`;
+    banner.style.display = "block";
+    btnCont.style.display = "inline-flex";
+  } else { banner.style.display = "none"; btnCont.style.display = "none"; }
+}
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.getElementById("player-hud").style.display = (["screen-map", "screen-quiz", "screen-vault"].includes(id) && playerState) ? "flex" : "none";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+function goHome() { checkResumeAvailability(); showScreen("screen-home"); }
+function openProfileSetup() {
+  if (playerState && playerState.name && !confirm("Tạo nhân vật mới sẽ thay thế tiến trình hiện tại trên thiết bị này. Em chắc chắn chứ?")) return;
+  showScreen("screen-profile");
+}
+function confirmProfile() {
+  const name = document.getElementById("inp-name").value.trim();
+  if (!name) { alert("Em vui lòng nhập Họ và tên!"); return; }
+  const charObj = CHARACTERS.find(c => c.id === selectedCharId) || CHARACTERS[0];
+  playerState = {
+    sessionId: "SES_" + Date.now() + "_" + Math.floor(Math.random() * 1000),
+    name, className: document.getElementById("inp-class").value, studentCode: document.getElementById("inp-code").value.trim(),
+    characterId: charObj.id, characterName: charObj.name, characterAvatar: charObj.avatar,
+    startTime: Date.now(), endTime: null, hearts: GAME_CONFIG.maxHearts, gold: 20, xp: 0, stars: 0, score: 0,
+    unlockedStage: 1, stageResults: {}, answeredLog: {}, wrongIds: [], earnedBadges: [], vaultFixedCount: 0
+  };
+  savePlayerState(); goMap();
+}
+function resumeGame() { if (playerState) { updateHUD(); goMap(); } }
+function getPlayerTitle(xp) { let cur = TITLES[0].name; for (const t of TITLES) if (xp >= t.minXp) cur = t.name; return cur; }
+function updateHUD() {
+  if (!playerState) return;
+  document.getElementById("hud-avatar").textContent = playerState.characterAvatar;
+  document.getElementById("hud-name").textContent = `${playerState.name} (${playerState.characterName})`;
+  document.getElementById("hud-title").textContent = `Lớp ${playerState.className} • ${getPlayerTitle(playerState.xp)}`;
+  document.getElementById("hud-hearts").textContent = playerState.hearts;
+  document.getElementById("hud-gold").textContent = playerState.gold;
+  document.getElementById("hud-stars").textContent = playerState.stars;
+  document.getElementById("hud-level").textContent = Math.floor(playerState.xp / 100) + 1;
+  document.getElementById("hud-xp-bar").style.width = (playerState.xp % 100) + "%";
+  document.getElementById("vault-count-map").textContent = playerState.wrongIds.length;
+  document.getElementById("vault-count-home").textContent = playerState.wrongIds.length;
+}
+function goMap() {
+  updateHUD();
+  const grid = document.getElementById("stage-grid"); grid.innerHTML = "";
+  let allPassed = true;
+  GAME_CONFIG.stages.forEach(st => {
+    const qs = QUESTION_BANK.filter(q => q.stage === st.id);
+    const res = playerState.stageResults[st.id];
+    const isUnlocked = st.id <= playerState.unlockedStage;
+    const isPassed = res && res.passed;
+    if (!isPassed) allPassed = false;
+    const stars = res ? res.stars : 0;
+    const minPass = Math.ceil(qs.length * GAME_CONFIG.passRatio);
+    const card = document.createElement("div");
+    card.className = "stage-card" + (!isUnlocked ? " locked" : (isPassed ? " completed" : ""));
+    card.innerHTML = `
+      <div>
+        <div class="stage-header"><span class="stage-icon">${st.icon}</span><span class="stage-stars">${"⭐".repeat(stars) + "☆".repeat(3 - stars)}</span></div>
+        <span class="stage-badge">${st.topic}</span>
+        <h3>${st.name}</h3>
+        <p style="font-size:18px; color:#334155; margin:8px 0;">${st.desc}</p>
+        <p style="font-size:17px; color:#475569;">📝 <strong>${qs.length} câu</strong> • Cần đúng tối thiểu <strong>${minPass}/${qs.length}</strong></p>
+      </div>
+      <div style="margin-top:14px;">
+        ${isUnlocked ? `<button class="btn ${isPassed ? 'btn-success' : 'btn-primary'}" style="width:100%;" onclick="startStage(${st.id})">${isPassed ? '🔄 Luyện lại trạm' : '⚔️ Chinh phục trạm'}</button>` : `<button class="btn" style="width:100%; background:#cbd5e1; color:#475569;" disabled>🔒 Chưa mở khóa</button>`}
+      </div>`;
+    grid.appendChild(card);
+  });
+  document.getElementById("btn-finish-journey").style.display = allPassed ? "inline-flex" : "none";
+  showScreen("screen-map");
+}
+function startStage(stageId) {
+  if (playerState.hearts <= 0) { alert("Em đã hết Tim! Hãy vào Kho ôn tập để hồi tim nhé."); openReviewVault(); return; }
+  currentStageId = stageId;
+  stageQuestions = QUESTION_BANK.filter(q => q.stage === stageId);
+  currentQIndex = 0; stageScore = 0; stageCorrectCount = 0;
+  document.getElementById("quiz-stage-title").textContent = GAME_CONFIG.stages.find(s => s.id === stageId).name;
+  showScreen("screen-quiz"); renderQuestion();
+}
+function exitStageToMap() { if (confirm("Quay về Bản đồ hành trình?")) goMap(); }
+function renderQuestion() {
+  const q = stageQuestions[currentQIndex];
+  currentQuestionAnswered = false; currentUserSelection = null;
+  document.getElementById("quiz-counter").textContent = `Câu ${currentQIndex + 1}/${stageQuestions.length}`;
+  document.getElementById("quiz-progress-bar").style.width = `${((currentQIndex + 1) / stageQuestions.length) * 100}%`;
+  document.getElementById("q-code").textContent = `Mã: ${q.id}`;
+  document.getElementById("q-topic").textContent = q.topic;
+  document.getElementById("q-level").textContent = q.level;
+  const tNames = { mcq: "Trắc nghiệm 1 đáp án", multi: "Chọn nhiều đáp án", tf_multi: "Đúng/Sai nhiều ý", order: "Sắp xếp thứ tự", match: "Ghép đôi", fill: "Điền đáp án" };
+  document.getElementById("q-type-label").textContent = tNames[q.type] || q.type;
+  document.getElementById("question-text").textContent = q.question;
+  document.getElementById("hint-display").style.display = "none";
+  document.getElementById("feedback-box").style.display = "none";
+  document.getElementById("btn-submit-answer").style.display = "inline-flex";
+  document.getElementById("btn-next-question").style.display = "none";
+  document.getElementById("pu-5050").disabled = (q.type !== "mcq");
+  const area = document.getElementById("answer-area"); area.innerHTML = "";
+  const letters = ["A", "B", "C", "D", "E"];
+  if (q.type === "mcq") {
+    const list = document.createElement("div"); list.className = "options-list";
+    q.options.forEach((opt, idx) => {
+      const btn = document.createElement("button"); btn.className = "option-btn"; btn.dataset.idx = idx;
+      btn.innerHTML = `<strong>${letters[idx]}.</strong> <span>${opt}</span>`;
+      btn.onclick = () => { if (currentQuestionAnswered) return; document.querySelectorAll(".option-btn").forEach(b => b.classList.remove("selected")); btn.classList.add("selected"); currentUserSelection = idx; };
+      list.appendChild(btn);
+    });
+    area.appendChild(list);
+  } else if (q.type === "multi") {
+    currentUserSelection = [];
+    const list = document.createElement("div"); list.className = "options-list";
+    q.options.forEach((opt, idx) => {
+      const btn = document.createElement("button"); btn.className = "option-btn"; btn.dataset.idx = idx;
+      btn.innerHTML = `<strong>[${letters[idx]}]</strong> <span>${opt}</span>`;
+      btn.onclick = () => {
+        if (currentQuestionAnswered) return;
+        if (currentUserSelection.includes(idx)) { currentUserSelection = currentUserSelection.filter(i => i !== idx); btn.classList.remove("selected"); }
+        else { currentUserSelection.push(idx); btn.classList.add("selected"); }
+      };
+      list.appendChild(btn);
+    });
+    area.appendChild(list);
+  } else if (q.type === "tf_multi") {
+    currentUserSelection = new Array(q.statements.length).fill(null);
+    q.statements.forEach((stmt, idx) => {
+      const row = document.createElement("div"); row.className = "tf-row";
+      row.innerHTML = `<div style="flex:1;">${stmt}</div><div class="tf-choices"><button type="button" class="tf-btn" id="tf-${idx}-true" onclick="selectTF(${idx}, true)">Đúng</button><button type="button" class="tf-btn" id="tf-${idx}-false" onclick="selectTF(${idx}, false)">Sai</button></div>`;
+      area.appendChild(row);
+    });
+  } else if (q.type === "order") {
+    currentUserSelection = [...q.items]; renderOrderItems();
+  } else if (q.type === "match") {
+    currentUserSelection = new Array(q.pairs.length).fill("");
+    const rightOpts = [...q.pairs.map(p => p.right)].sort(() => Math.random() - 0.5);
+    q.pairs.forEach((p, idx) => {
+      const row = document.createElement("div"); row.className = "match-row";
+      row.innerHTML = `<div style="font-weight:bold;">${idx + 1}. ${p.left}</div><div><select class="form-control" onchange="currentUserSelection[${idx}]=this.value"><option value="">-- Chọn --</option>${rightOpts.map(ro => `<option value="${ro.replace(/"/g, '&quot;')}">${ro}</option>`).join("")}</select></div>`;
+      area.appendChild(row);
+    });
+  } else if (q.type === "fill") {
+    const keys = ["0","1","2","3","4","5","6","7","8","9","Đúng","Sai",".","-","⌫"];
+    area.innerHTML = `<div class="fill-box"><input type="text" id="fill-input" class="fill-input" placeholder="Nhập đáp án..." oninput="currentUserSelection=this.value"><div class="keypad">${keys.map(k => `<button type="button" class="key-btn" onclick="pressVirtualKey('${k}')">${k}</button>`).join("")}</div></div>`;
+  }
+}
+function selectTF(idx, val) {
+  if (currentQuestionAnswered) return;
+  currentUserSelection[idx] = val;
+  document.getElementById(`tf-${idx}-true`).className = "tf-btn" + (val === true ? " active-true" : "");
+  document.getElementById(`tf-${idx}-false`).className = "tf-btn" + (val === false ? " active-false" : "");
+}
+function renderOrderItems() {
+  const area = document.getElementById("answer-area"); area.innerHTML = "";
+  currentUserSelection.forEach((item, idx) => {
+    const div = document.createElement("div"); div.className = "order-item";
+    div.innerHTML = `<div><strong>Bước ${idx + 1}:</strong> ${item}</div><div class="order-controls"><button type="button" class="order-btn" ${idx===0?"disabled":""} onclick="moveOrder(${idx},-1)">⬆️</button><button type="button" class="order-btn" ${idx===currentUserSelection.length-1?"disabled":""} onclick="moveOrder(${idx},1)">⬇️</button></div>`;
+    area.appendChild(div);
+  });
+}
+function moveOrder(idx, dir) {
+  if (currentQuestionAnswered) return;
+  const t = idx + dir; [currentUserSelection[idx], currentUserSelection[t]] = [currentUserSelection[t], currentUserSelection[idx]]; renderOrderItems();
+}
+function pressVirtualKey(k) {
+  if (currentQuestionAnswered) return;
+  const inp = document.getElementById("fill-input");
+  if (k === "⌫") inp.value = inp.value.slice(0, -1);
+  else if (k === "Đúng" || k === "Sai") inp.value = k;
+  else inp.value += k;
+  currentUserSelection = inp.value;
+}
+function usePowerup(type) {
+  if (currentQuestionAnswered) return;
+  const costs = { hint: 15, "5050": 25, skip: 30, heal: 35 };
+  if (playerState.gold < costs[type]) { alert(`Em cần ${costs[type]} 🪙 Vàng!`); return; }
+  const q = stageQuestions[currentQIndex];
+  if (type === "hint") { playerState.gold -= 15; document.getElementById("hint-text").textContent = q.hint; document.getElementById("hint-display").style.display = "block"; document.getElementById("pu-hint").disabled = true; }
+  else if (type === "5050" && q.type === "mcq") {
+    playerState.gold -= 25;
+    Array.from(document.querySelectorAll(".option-btn")).filter(b => parseInt(b.dataset.idx) !== q.answer).sort(() => Math.random() - 0.5).slice(0, 2).forEach(b => b.classList.add("eliminated"));
+    document.getElementById("pu-5050").disabled = true;
+  } else if (type === "skip") {
+    playerState.gold -= 30; if (!playerState.wrongIds.includes(q.id)) playerState.wrongIds.push(q.id); savePlayerState(); nextQuestion(); return;
+  } else if (type === "heal") {
+    if (playerState.hearts >= GAME_CONFIG.maxHearts) { alert("Tim đã đầy!"); return; }
+    playerState.gold -= 35; playerState.hearts++;
+  }
+  savePlayerState();
+}
+function submitAnswer() {
+  if (currentQuestionAnswered) return;
+  const q = stageQuestions[currentQIndex];
+  if ((q.type === "mcq" && currentUserSelection === null) || (q.type === "multi" && !currentUserSelection.length) || (q.type === "tf_multi" && currentUserSelection.includes(null)) || (q.type === "match" && currentUserSelection.includes("")) || (q.type === "fill" && (!currentUserSelection || !currentUserSelection.trim()))) {
+    alert("Em hãy hoàn thành câu trả lời trước khi xác nhận!"); return;
+  }
+  let isCorrect = false, userAnsText = "", correctAnsText = "";
+  if (q.type === "mcq") {
+    isCorrect = currentUserSelection === q.answer; userAnsText = q.options[currentUserSelection]; correctAnsText = q.options[q.answer];
+    document.querySelectorAll(".option-btn").forEach(b => { const i = parseInt(b.dataset.idx); if (i === q.answer) b.classList.add("correct"); else if (i === currentUserSelection && !isCorrect) b.classList.add("wrong"); });
+  } else if (q.type === "multi") {
+    isCorrect = [...currentUserSelection].sort().join(",") === [...q.answer].sort().join(",");
+    userAnsText = currentUserSelection.map(i => q.options[i]).join("; "); correctAnsText = q.answer.map(i => q.options[i]).join("; ");
+    document.querySelectorAll(".option-btn").forEach(b => { const i = parseInt(b.dataset.idx); if (q.answer.includes(i)) b.classList.add("correct"); else if (currentUserSelection.includes(i)) b.classList.add("wrong"); });
+  } else if (q.type === "tf_multi") {
+    isCorrect = q.answer.every((v, i) => v === currentUserSelection[i]);
+    userAnsText = currentUserSelection.map((v, i) => `${i+1}:${v?"Đúng":"Sai"}`).join(", "); correctAnsText = q.answer.map((v, i) => `${i+1}:${v?"Đúng":"Sai"}`).join(", ");
+  } else if (q.type === "order") {
+    isCorrect = q.correctOrder.every((v, i) => v === currentUserSelection[i]);
+    userAnsText = currentUserSelection.join(" → "); correctAnsText = q.correctOrder.join(" → ");
+  } else if (q.type === "match") {
+    isCorrect = q.pairs.every((p, i) => p.right === currentUserSelection[i]);
+    userAnsText = q.pairs.map((p, i) => `${p.left}=${currentUserSelection[i]}`).join("; "); correctAnsText = q.pairs.map(p => `${p.left}=${p.right}`).join("; ");
+  } else if (q.type === "fill") {
+    const accepts = (q.accept || [q.answer]).map(a => String(a).toLowerCase());
+    isCorrect = accepts.includes(currentUserSelection.trim().toLowerCase());
+    userAnsText = currentUserSelection.trim(); correctAnsText = q.answer;
+  }
+  currentQuestionAnswered = true;
+  document.getElementById("btn-submit-answer").style.display = "none";
+  document.getElementById("btn-next-question").style.display = "inline-flex";
+  const prevLog = playerState.answeredLog[q.id];
+  const alreadyRewarded = prevLog && prevLog.rewarded;
+  playerState.answeredLog[q.id] = { questionId: q.id, topic: q.topic, level: q.level, isCorrect, userAnswer: userAnsText, correctAnswer: correctAnsText, attempts: (prevLog ? prevLog.attempts : 0) + 1, rewarded: alreadyRewarded || isCorrect };
+  const fbBox = document.getElementById("feedback-box");
+  if (isCorrect) {
+    playTone("correct"); stageCorrectCount++; stageScore += 10;
+    if (!alreadyRewarded) { playerState.gold += 10; playerState.xp += 20; playerState.score += 10; }
+    fbBox.className = "feedback-box correct";
+    document.getElementById("fb-title").innerHTML = "🎉 CHÍNH XÁC!";
+    document.getElementById("fb-content").innerHTML = `<p><strong>✅ Đáp án đúng:</strong> ${correctAnsText}</p><p><strong>💡 Giải thích:</strong> ${q.explanation}</p>`;
+  } else {
+    playTone("wrong"); playerState.hearts = Math.max(0, playerState.hearts - 1);
+    if (!playerState.wrongIds.includes(q.id)) playerState.wrongIds.push(q.id);
+    fbBox.className = "feedback-box wrong";
+    document.getElementById("fb-title").innerHTML = "💪 CHƯA CHÍNH XÁC! CÙNG RÚT KINH NGHIỆM NHÉ!";
+    document.getElementById("fb-content").innerHTML = `<p><strong>✅ Đáp án đúng:</strong> ${correctAnsText}</p><p><strong>📖 Giải thích:</strong> ${q.explanation}</p><p><strong>⚠️ Lỗi sai thường gặp:</strong> ${q.commonMistake}</p><p><strong>🛠️ Củng cố:</strong> ${q.remedy}</p>`;
+  }
+  fbBox.style.display = "block"; savePlayerState();
+  document.getElementById("btn-next-question").textContent = playerState.hearts <= 0 ? "📚 Hết tim – Vào Kho ôn tập" : (currentQIndex === stageQuestions.length - 1 ? "🏁 Hoàn thành trạm" : "➡️ Câu tiếp theo");
+}
+function nextQuestion() {
+  if (playerState.hearts <= 0) { openReviewVault(); return; }
+  if (currentQIndex < stageQuestions.length - 1) { currentQIndex++; renderQuestion(); }
+  else completeStage();
+}
+function completeStage() {
+  playTone("win");
+  const total = stageQuestions.length, ratio = stageCorrectCount / total, passed = ratio >= GAME_CONFIG.passRatio;
+  const stars = ratio >= 0.9 ? 3 : (ratio >= 0.75 ? 2 : (passed ? 1 : 0));
+  const prev = playerState.stageResults[currentStageId];
+  playerState.stageResults[currentStageId] = { passed: (prev && prev.passed) || passed, correct: prev ? Math.max(prev.correct, stageCorrectCount) : stageCorrectCount, total, stars: prev ? Math.max(prev.stars, stars) : stars };
+  playerState.stars = Object.values(playerState.stageResults).reduce((s, r) => s + r.stars, 0);
+  if (passed) {
+    playerState.gold += 25; playerState.xp += 50;
+    if (currentStageId === playerState.unlockedStage && currentStageId < GAME_CONFIG.stages.length) playerState.unlockedStage++;
+    if (!playerState.earnedBadges.includes("b_first")) playerState.earnedBadges.push("b_first");
+    if (currentStageId === 2 && stars === 3 && !playerState.earnedBadges.includes("b_safe")) playerState.earnedBadges.push("b_safe");
+    if (currentStageId === 3 && stars === 3 && !playerState.earnedBadges.includes("b_algo")) playerState.earnedBadges.push("b_algo");
+  }
+  const allPassed = GAME_CONFIG.stages.every(s => playerState.stageResults[s.id] && playerState.stageResults[s.id].passed);
+  if (allPassed && !playerState.endTime) { playerState.endTime = Date.now(); if (!playerState.earnedBadges.includes("b_master")) playerState.earnedBadges.push("b_master"); }
+  savePlayerState(); syncToGoogleSheets();
+  alert(passed ? `🎊 Hoàn thành Trạm ${currentStageId}! Đúng ${stageCorrectCount}/${total} câu (${stars} ⭐).` : `💡 Em đạt ${stageCorrectCount}/${total} câu. Hãy vào Kho ôn tập củng cố và thử lại nhé!`);
+  if (allPassed) showFinalSummary(); else goMap();
+}
+function openReviewVault() { if (!playerState) { openProfileSetup(); return; } updateHUD(); renderVaultList(); showScreen("screen-vault"); }
+function renderVaultList() {
+  const container = document.getElementById("vault-list");
+  const ft = document.getElementById("vault-filter-topic").value;
+  let list = QUESTION_BANK.filter(q => playerState.wrongIds.includes(q.id));
+  if (ft !== "ALL") list = list.filter(q => q.topic === ft);
+  if (!list.length) { container.innerHTML = `<div class="card" style="text-align:center;"><h3>🌟 Không còn câu sai nào trong Kho ôn tập!</h3></div>`; return; }
+  container.innerHTML = list.map(q => `
+    <div class="card" style="border-color:#f59e0b;">
+      <p><strong>[${q.topic}]</strong> ${q.question}</p>
+      <p style="font-size:18px; color:#b45309; margin:8px 0;">⚠️ ${q.commonMistake} | 💡 ${q.remedy}</p>
+      <div id="vp-${q.id}"><button class="btn btn-success" onclick="practiceVault('${q.id}')">✍️ Ôn lại để hồi +1 ❤️ Tim</button></div>
+    </div>`).join("");
+}
+function practiceVault(qId) {
+  const q = QUESTION_BANK.find(x => x.id === qId);
+  const box = document.getElementById(`vp-${qId}`);
+  if (q.type === "mcq") {
+    box.innerHTML = q.options.map((o, i) => `<button class="option-btn" style="margin-bottom:6px; width:100%;" onclick="if(${i}===${q.answer}){masterVault('${qId}');}else{alert('Chưa đúng! ${q.explanation.replace(/'/g,"\\'")}');}">${o}</button>`).join("");
+  } else {
+    box.innerHTML = `<div style="background:#eff6ff; padding:12px; border-radius:10px;"><p><strong>Lời giải:</strong> ${q.explanation}</p><button class="btn btn-primary" style="margin-top:8px;" onclick="masterVault('${qId}')">✔️ Em đã hiểu bài (+1 ❤️ Tim)</button></div>`;
+  }
+}
+function masterVault(qId) {
+  playTone("correct");
+  playerState.wrongIds = playerState.wrongIds.filter(id => id !== qId);
+  playerState.hearts = Math.min(GAME_CONFIG.maxHearts, playerState.hearts + 1);
+  playerState.vaultFixedCount = (playerState.vaultFixedCount || 0) + 1;
+  if (playerState.vaultFixedCount >= 3 && !playerState.earnedBadges.includes("b_debug")) playerState.earnedBadges.push("b_debug");
+  savePlayerState(); syncToGoogleSheets(); renderVaultList();
+}
+function showFinalSummary() {
+  const logs = Object.values(playerState.answeredLog), right = logs.filter(l => l.isCorrect).length;
+  const acc = logs.length ? Math.round((right / logs.length) * 100) : 0;
+  document.getElementById("summary-header-info").innerHTML = `<h3>${playerState.characterAvatar} ${playerState.name} — Lớp ${playerState.className}</h3><p>Danh hiệu: <strong>${getPlayerTitle(playerState.xp)}</strong></p>`;
+  document.getElementById("summary-kpis").innerHTML = `
+    <div class="kpi-card"><div class="kpi-value">${playerState.score}</div><div class="kpi-label">Tổng điểm</div></div>
+    <div class="kpi-card"><div class="kpi-value">${right}/${logs.length} (${acc}%)</div><div class="kpi-label">Tỷ lệ đúng</div></div>
+    <div class="kpi-card"><div class="kpi-value">${playerState.stars} ⭐</div><div class="kpi-label">Tổng sao</div></div>`;
+  document.getElementById("summary-stages").innerHTML = GAME_CONFIG.stages.map(st => {
+    const r = playerState.stageResults[st.id] || { correct: 0, total: 1, stars: 0 };
+    const pct = Math.round((r.correct / r.total) * 100);
+    return `<div class="bar-chart-row"><div class="bar-chart-label"><span>${st.name}</span><span>${r.correct}/${r.total} (${pct}%)</span></div><div class="bar-chart-track"><div class="bar-right" style="width:${pct}%"></div></div></div>`;
+  }).join("");
+  document.getElementById("summary-pedagogy").innerHTML = `<p>Em đã hoàn thành xuất sắc hành trình! Hãy mở <strong>Kho ôn tập</strong> nếu còn câu hỏi cần củng cố thêm.</p>`;
+  showScreen("screen-summary");
+}
+function confirmResetGame() { if (confirm("Xóa tiến trình để chơi lại từ đầu?")) { localStorage.removeItem(LS_PLAYER_KEY); playerState = null; goHome(); } }
+function openModal(id) {
+  if (id === "modal-badges") {
+    const earned = playerState ? playerState.earnedBadges : [];
+    document.getElementById("badges-list").innerHTML = BADGES_DEF.map(b => `<div style="padding:10px; border:1px solid #cbd5e1; border-radius:10px; margin-bottom:8px;">${b.icon} <strong>${b.name}</strong> ${earned.includes(b.id)?"✅":"🔒"} - ${b.desc}</div>`).join("");
+  }
+  document.getElementById(id).classList.add("active");
+}
+function closeModal(id) { document.getElementById(id).classList.remove("active"); }
+function getAllLocalRecords() { try { return JSON.parse(localStorage.getItem(LS_RECORDS_KEY)) || []; } catch (e) { return []; } }
+function upsertLocalRecord() {
+  if (!playerState) return;
+  const records = getAllLocalRecords(), logs = Object.values(playerState.answeredLog), right = logs.filter(l => l.isCorrect).length;
+  const allPassed = GAME_CONFIG.stages.every(s => playerState.stageResults[s.id] && playerState.stageResults[s.id].passed);
+  const rec = {
+    sessionId: playerState.sessionId, gameTitle: GAME_CONFIG.gameTitle, lessonTitle: GAME_CONFIG.lessonTitle,
+    studentCode: playerState.studentCode, name: playerState.name, className: playerState.className, characterName: playerState.characterName,
+    score: playerState.score, correctCount: right, wrongCount: logs.length - right, totalAnswered: logs.length,
+    accuracy: logs.length ? Math.round((right / logs.length) * 100) : 0, stars: playerState.stars, xp: playerState.xp,
+    level: Math.floor(playerState.xp / 100) + 1, title: getPlayerTitle(playerState.xp), completed: allPassed,
+    durationSec: Math.max(1, Math.round(((playerState.endTime || Date.now()) - playerState.startTime) / 1000)),
+    updatedAt: new Date().toISOString(), answeredLog: playerState.answeredLog
+  };
+  const idx = records.findIndex(r => r.sessionId === rec.sessionId);
+  if (idx >= 0) records[idx] = rec; else records.push(rec);
+  localStorage.setItem(LS_RECORDS_KEY, JSON.stringify(records));
+  return rec;
+}
+function saveWebAppConfig() {
+  const url = document.getElementById("inp-webapp-url").value.trim();
+  localStorage.setItem(LS_WEBAPP_KEY, url);
+  document.getElementById("syncStatusBadge").textContent = url ? "☁️ Đã cấu hình Cloud" : "💾 Lưu cục bộ";
+  closeModal("modal-config");
+}
+async function syncToGoogleSheets() {
+  const rec = upsertLocalRecord();
+  const url = localStorage.getItem(LS_WEBAPP_KEY) || GAME_CONFIG.defaultWebAppUrl;
+  if (!rec || !url) return;
+  try {
+    const res = await fetch(url, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "submitResult", payload: rec }) });
+    const d = await res.json();
+    if (d && d.status === "success") document.getElementById("syncStatusBadge").textContent = "✅ Đã đồng bộ Cloud";
+  } catch (e) { document.getElementById("syncStatusBadge").textContent = "⚠️ Lưu cục bộ"; }
+}
+async function fetchTeacherDataFromCloud() {
+  const url = localStorage.getItem(LS_WEBAPP_KEY) || GAME_CONFIG.defaultWebAppUrl;
+  if (!url) { alert("Chưa cấu hình URL Web App!"); renderTeacherDashboard(); return; }
+  try {
+    const res = await fetch(`${url}?action=getResults&lesson=${encodeURIComponent(GAME_CONFIG.lessonTitle)}`);
+    const d = await res.json();
+    if (d && Array.isArray(d.records)) { localStorage.setItem(LS_RECORDS_KEY, JSON.stringify(d.records)); renderTeacherDashboard(); }
+  } catch (e) { alert("Lỗi kết nối: " + e.message); }
+}
+function openTeacherAuth() {
+  if (!teacherAuthenticated) {
+    const pin = prompt("Nhập mã truy cập Giáo viên (Võ Thị Thanh):");
+    if (pin !== GAME_CONFIG.teacherPasscode) { if (pin !== null) alert("Sai mã truy cập!"); return; }
+    teacherAuthenticated = true;
+  }
+  renderTeacherDashboard(); showScreen("screen-teacher");
+}
+function switchTeacherTab(idx, btn) {
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".tab-pane").forEach(p => p.classList.remove("active"));
+  btn.classList.add("active"); document.getElementById(`t-tab-${idx}`).classList.add("active");
+}
+function getFilteredTeacherRecords() {
+  const fc = document.getElementById("t-filter-class").value, fs = document.getElementById("t-filter-status").value, q = document.getElementById("t-search-student").value.trim().toLowerCase();
+  return getAllLocalRecords().filter(r => (fc === "ALL" || r.className === fc) && (fs === "ALL" || (fs === "COMPLETED" ? r.completed : !r.completed)) && (!q || r.name.toLowerCase().includes(q)));
+}
+function renderTeacherDashboard() {
+  const records = getFilteredTeacherRecords();
+  const totalQ = records.reduce((s, r) => s + r.totalAnswered, 0), totalR = records.reduce((s, r) => s + r.correctCount, 0);
+  document.getElementById("t-kpi-grid").innerHTML = `
+    <div class="kpi-card"><div class="kpi-value">${records.length}</div><div class="kpi-label">Học sinh tham gia</div></div>
+    <div class="kpi-card"><div class="kpi-value">${records.filter(r => r.completed).length}/${records.length}</div><div class="kpi-label">Hoàn thành</div></div>
+    <div class="kpi-card"><div class="kpi-value">${totalQ ? Math.round((totalR/totalQ)*100) : 0}%</div><div class="kpi-label">Tỷ lệ đúng TB</div></div>`;
+  const byClass = {}; records.forEach(r => { (byClass[r.className] = byClass[r.className] || []).push(r); });
+  document.getElementById("t-class-cards").innerHTML = Object.entries(byClass).map(([cls, list]) => `<div class="stage-card" style="padding:14px;"><h3>Lớp ${cls}</h3><p>Tham gia: ${list.length} HS • Hoàn thành: ${list.filter(x=>x.completed).length}</p></div>`).join("") || "<p>Chưa có dữ liệu thực tế.</p>";
+  const topicAgg = {}, qAgg = {};
+  QUESTION_BANK.forEach(q => { qAgg[q.id] = { ...q, att: 0, right: 0, wrong: 0 }; if (!topicAgg[q.topic]) topicAgg[q.topic] = { topic: q.topic, right: 0, wrong: 0, remedy: q.remedy }; });
+  records.forEach(r => Object.values(r.answeredLog || {}).forEach(l => {
+    if (topicAgg[l.topic]) { l.isCorrect ? topicAgg[l.topic].right++ : topicAgg[l.topic].wrong++; }
+    if (qAgg[l.questionId]) { qAgg[l.questionId].att++; l.isCorrect ? qAgg[l.questionId].right++ : qAgg[l.questionId].wrong++; }
+  }));
+  const tArr = Object.values(topicAgg).map(t => ({ ...t, total: t.right + t.wrong, rate: (t.right + t.wrong) ? Math.round((t.wrong / (t.right + t.wrong)) * 100) : 0 })).sort((a, b) => b.rate - a.rate);
+  document.getElementById("t-tab0-content").innerHTML = `<table><thead><tr><th>Chủ đề</th><th>Lượt sai</th><th>Tỷ lệ sai</th><th>Gợi ý hỗ trợ</th></tr></thead><tbody>${tArr.map(t => `<tr><td>${t.topic}</td><td>${t.wrong}/${t.total}</td><td>${t.rate}%</td><td>${t.remedy}</td></tr>`).join("")}</tbody></table>`;
+  const ranked = [...records].sort((a, b) => b.score - a.score || b.accuracy - a.accuracy || a.durationSec - b.durationSec);
+  document.getElementById("t-tab1-content").innerHTML = `<table><thead><tr><th>Hạng</th><th>Họ tên</th><th>Lớp</th><th>Điểm</th><th>Đúng/Sai</th><th>Tỷ lệ</th><th>Sao</th></tr></thead><tbody>${ranked.map((r, i) => `<tr><td>#${i+1}</td><td>${r.name}</td><td>${r.className}</td><td>${r.score}</td><td>${r.correctCount}/${r.wrongCount}</td><td>${r.accuracy}%</td><td>${r.stars} ⭐</td></tr>`).join("")}</tbody></table>`;
+  document.getElementById("t-tab2-content").innerHTML = `<table><thead><tr><th>Họ tên</th><th>Lớp</th><th>Điểm</th><th>Chi tiết</th></tr></thead><tbody>${records.map(r => `<tr><td>${r.name}</td><td>${r.className}</td><td>${r.score}</td><td><button class="btn btn-outline" style="padding:4px 8px; font-size:16px;" onclick="inspectStudent('${r.sessionId}')">Xem</button></td></tr>`).join("")}</tbody></table>`;
+  document.getElementById("t-tab3-content").innerHTML = totalQ ? tArr.map(t => `<div class="bar-chart-row"><div class="bar-chart-label"><span>${t.topic}</span><span>Sai: ${t.rate}%</span></div><div class="bar-chart-track"><div class="bar-wrong" style="width:${t.rate}%"></div><div class="bar-right" style="width:${100-t.rate}%"></div></div></div>`).join("") : "<p>Chưa có dữ liệu vẽ biểu đồ.</p>";
+  document.getElementById("t-tab4-content").innerHTML = `<table><thead><tr><th>Mã</th><th>Câu hỏi</th><th>Lượt</th><th>Đúng/Sai</th><th>Tỷ lệ sai</th></tr></thead><tbody>${Object.values(qAgg).map(q => `<tr><td>${q.id}</td><td>${q.question}</td><td>${q.att}</td><td>${q.right}/${q.wrong}</td><td>${q.att?Math.round((q.wrong/q.att)*100):0}%</td></tr>`).join("")}</tbody></table>`;
+}
+function inspectStudent(sid) {
+  const r = getAllLocalRecords().find(x => x.sessionId === sid); if (!r) return;
+  document.getElementById("t-student-detail-box").innerHTML = `<table><thead><tr><th>Mã</th><th>Kết quả</th><th>Chọn</th><th>Đúng</th></tr></thead><tbody>${Object.values(r.answeredLog||{}).map(l=>`<tr><td>${l.questionId}</td><td>${l.isCorrect?"✅":"❌"}</td><td>${l.userAnswer}</td><td>${l.correctAnswer}</td></tr>`).join("")}</tbody></table>`;
+}
+function exportCSV(type) {
+  const records = getFilteredTeacherRecords(); if (!records.length) { alert("Chưa có dữ liệu!"); return; }
+  const rows = [["STT", "Ho_Ten", "Lop", "Diem", "Cau_Dung", "Cau_Sai", "Ty_Le(%)"]];
+  records.forEach((r, i) => rows.push([i+1, r.name, r.className, r.score, r.correctCount, r.wrongCount, r.accuracy]));
+  const csv = "\uFEFF" + rows.map(e => e.map(c => `"${String(c??"").replace(/"/g,'""')}"`).join(",")).join("\n");
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8;" })); a.download = `BaoCao_${type}.csv`; a.click();
+}
+</script>
+</body>
+</html>
